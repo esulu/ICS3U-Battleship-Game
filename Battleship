@@ -1,0 +1,53 @@
+/*
+ Eren Sulutas
+ 05/31/2017
+ ICS3U
+ Summative - Game Design
+ Battleship
+ This program is a playable version of the board game Battleship made in Java 
+ */
+
+class Battleship 
+{
+  public static void main(String[] args)
+  {
+    
+    // Main method will act as the main connector of different methods 
+    // Gives the user some options on whether they want to play or see the rulse 
+    
+  }
+  
+  public static void printRules()
+  {
+    
+    // Displays the instructions on how to play the game to the user 
+    
+  }
+  
+  public static void playGame()
+  {
+    
+   // Method where most of the gameplay will be handled  
+    
+  }
+  
+  public static int userChoice()
+  {
+    
+    // Method which handles the user choice of attack
+  
+  public static int cpuChoice()
+  {
+    
+    // Method which handles the computer choice of attack 
+    
+  }
+  
+  public static void printBoard()
+  {
+    
+    // Method used to print the playing board when updated 
+    
+  }
+
+}
