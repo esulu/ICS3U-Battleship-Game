@@ -15,6 +15,7 @@ class Battleship
     // Main method will act as the main connector of different methods 
     // Gives the user some options on whether they want to play or see the rulse 
     
+    playGame();
   }
   
   public static void printRules()
@@ -27,62 +28,124 @@ class Battleship
   public static void playGame()
   {
     
-   // Method where most of the gameplay will be handled  
+    // Method where most of the gameplay will be handled  
+    /*
+     String[] numbers = {" ", "1", "2", "3", "4", "5", "6", "7", "8"};
+     String[] letters = {" ", "A", "B", "C", "D", "E", "F", "G", "H"}; */
+    
+    int[][] board = new int[9][9]; // Initializes an 8x8 game board
+    int[][] board2 = new int[9][9];
+    
+    initialBoard(board, board2);
+    printBoard(board, board2);
+    
     
   }
   
-  public static void userSetup()
+  public static void initialBoard(int board[][], int board2[][])
   {
     
-    // Method where the user makes their initial ship setup 
-     
-  }
-  
-    public static void cpuSetup()
-  {
+    // Method used to classify the initial playing board
     
-    // Method where the computer makes their initial ship setup 
-     
-  }
-    
-  public static boolean setupUserError()
-  {
-    
-    // Method which checks if suer boats overlap or are placed in invalid locations
+    // Each board position is given the value of 0, which is an un-hit/empty coordinate
+    for (int row = 0; row <= 8; row ++) {
+      for (int column = 0; column <= 8; column ++) {
+        board[row][column] = 0;
+        board2[row][column] = 0;
+      }
+    }
     
   }
   
-   public static boolean setupCpuError()
-  {
-    
-    // Method which checks if computer boats overlap or are placed in invalid locations
-    
-  }
-  
-  public static int userChoice()
-  {
-    
-    // Method which handles the user choice of attack
-  
-  public static int cpuChoice()
-  {
-    
-    // Method which handles the computer choice of attack 
-    
-  }
-  
-  public static void printBoard()
+  public static void printBoard(int board[][], int board2[][])
   {
     
     // Method used to print the playing board when updated 
     
-  }
+    String[] numbers = {" ", "1", "2", "3", "4", "5", "6", "7", "8"};
+    String[] letters = {" ", "A", "B", "C", "D", "E", "F", "G", "H"};
+    
+    // Fills the boards
+    for (int y = 0; y < 9; y ++) {
+      for (int x = 0; x < 9; x ++){ // Board 1
+        if (x == 0) { // Letters for the first column 
+          System.out.print(letters[y]);
+        } else if (y == 0) { // Numbers for the first row
+          System.out.print(numbers[x]);
+        } else if (board[y][x] == 0) { // Empty board spaces              
+          System.out.print("~");
+        } else if (board[y][x] == 1) { // Missed shot 
+          System.out.print("O");
+        } else if (board[y][x] == 2) { // Hit 
+          System.out.print("X");
+        } else if (board[y][x] == 3) { // Sunken ship
+          System.out.print("|");
+        } else if (board[y][x] == 4) { // User ship
+          System.out.print("#");
+        }
+      System.out.print(" "); // Spacing 
+    }
+    for (int x = 0; x < 9; x ++){ // Board 2
+      if (x == 0) { // Letters for the first column 
+        System.out.print("\t" + letters[y]);
+      } else if (y == 0) { // Numbers for the first row
+        System.out.print(numbers[x]);
+      } else { // Empty board spaces              
+        System.out.print("~"); 
+      }
+      System.out.print(" "); // Spacing   
+    }
+    System.out.println(); // New lines 
+  } 
   
-  public static void printScore()
-  {
-    
-    // Method used to display the score 
-    
-  }
+}
+
+public static void userSetup()
+{
+  
+  // Method where the user makes their initial ship setup 
+  
+}
+
+public static void cpuSetup()
+{
+  
+  // Method where the computer makes their initial ship setup 
+  
+}
+
+public static  void a()//boolean setupUserError()
+{
+  
+  // Method which checks if suer boats overlap or are placed in invalid locations
+  
+}
+
+public static void b()//boolean setupCpuError()
+{
+  
+  // Method which checks if computer boats overlap or are placed in invalid locations
+  
+}
+
+public static void c()//int userChoice()
+{
+  
+  // Method which handles the user choice of attack
+  
+}
+public static void d()// int cpuChoice()
+{
+  
+  // Method which handles the computer choice of attack 
+  
+}
+
+public static void printScore()
+{
+  
+  // Method used to display the score 
+  
+}
 
 }
