@@ -208,11 +208,15 @@ class Battleship
           if (entry[2] + i >= 9) {
             // Ship goes out of the board 
             hasSpace = false;
+            System.out.println("Error: Ship cannot go out of the board. Enter a new input. Ex: HB7");
+            entry = lettersToInt(); // User enters a new input 
             break; 
           }
           if (board[entry[1]][entry[2]+i] != 0) {
             // Checks if this area is occupied by another ship
             hasSpace = false;
+            System.out.println("Error: Ships cannot overlap. Enter a new input. Ex: HB7");
+            entry = lettersToInt(); // User enters a new input 
             break;
           }
         }
@@ -234,11 +238,15 @@ class Battleship
           if (entry[1] + i >= 9) { 
             // Ship goes out of the board 
             hasSpace = false;
+            System.out.println("Error: Ship cannot go out of the board. Enter a new input. Ex: HB7");
+            entry = lettersToInt(); // User enters a new input 
             break;
           }
           if (board[entry[1]+i][entry[2]] != 0) {
             // Checks if this area is occupied by another ship
             hasSpace = false;
+            System.out.println("Error: Ships cannot overlap. Enter a new input. Ex: HB7");
+            entry = lettersToInt(); // User enters a new input 
             break;
           }
         }
