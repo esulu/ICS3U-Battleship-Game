@@ -96,21 +96,39 @@ class Battleship
     
     // Method where the user makes their initial ship setup 
     int[][] board = new int[9][9];
-    int[] entry1 = new int[3]; // Arrays to hold the inital coordinates of the ships 
+    int[] entry0 = new int[3]; // Arrays to hold the inital coordinates of the ships 
+    int[] entry1 = new int[3];
+    int[] entry2 = new int[3];
+    int[] entry3 = new int[3];
     int shipSize;
     
     System.out.println("\nShip placements: ");
     System.out.println("The coordinate you enter will be the upper left of the ship.");
     System.out.println("Entry must be entered in the following format: <(V)ertical/(H)orizontal> <Y-Axis> <X-Axis> Examples: VC5, HG5");
+    
+    System.out.println("Enter the coordinates to place your Aircraft Carrier (1x5). Ex: HA4");
+    entry0 = lettersToInt(); // User entry is handled in the lettersToInt method 
+    shipSize = 5; // Indicates the ship size (in this case 4 long)
+    
+    board = setupUserError(entry0, board, shipSize); // Sends some variables to the setupUserError method to check if the ship is illegally placed 
+    
     System.out.println("Enter the coordinates to place your Battleship (1x4). Ex: HA4");
     entry1 = lettersToInt(); // User entry is handled in the lettersToInt method 
     shipSize = 4; // Indicates the ship size (in this case 4 long)
     
-    System.out.println(entry1[0]);
-    System.out.println(entry1[1]);
-    System.out.println(entry1[2]);
-    
     board = setupUserError(entry1, board, shipSize); // Sends some variables to the setupUserError method to check if the ship is illegally placed 
+    
+    System.out.println("Enter the coordinates to place your Submarine (1x3). Ex: HA4");
+    entry2 = lettersToInt(); // User entry is handled in the lettersToInt method 
+    shipSize = 3; // Indicates the ship size (in this case 4 long)
+    
+    board = setupUserError(entry2, board, shipSize); // Sends some variables to the setupUserError method to check if the ship is illegally placed 
+    
+    System.out.println("Enter the coordinates to place your Patrol Boat (1x2). Ex: HA4");
+    entry3 = lettersToInt(); // User entry is handled in the lettersToInt method 
+    shipSize = 2; // Indicates the ship size (in this case 4 long)
+    
+    board = setupUserError(entry3, board, shipSize); // Sends some variables to the setupUserError method to check if the ship is illegally placed 
 
     return board;
     
