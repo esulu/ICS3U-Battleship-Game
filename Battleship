@@ -34,11 +34,18 @@ class Battleship
     
     int[][] board = new int[9][9]; // Initializes an 8x8 game board
     int[][] board2 = new int[9][9];
+    boolean gameEnd = false; 
     
-    printBoard(board, board2);
     board = userSetup(); // Method to handle the user ship setup
     board2 = cpuSetup(board2); // Method to handle the CPU ship setup 
-    printBoard(board, board2); // Displays the3 boad to the user 
+    printBoard(board, board2); // Displays the boad to the user 
+    
+    // Loops the turns of the user and the CPU until there is a winner 
+    do {
+      board2 = userChoice(board2);
+      //board2 = cpuChoice(board);
+      printBoard(board, board2);
+    } while (gameEnd == false);
     
     
     
@@ -89,7 +96,7 @@ class Battleship
         } else if (board2[y][x] == 3) { // Sunken CPU ship
           System.out.print("|");
         } else if (board2[y][x] == 4) { //CPU ship, not seen by the yser
-          System.out.print("~");
+          System.out.print("a");
         }
         System.out.print(" "); // Spacing   
       }
@@ -144,15 +151,13 @@ class Battleship
   public static int[] lettersToIntSetup()
   {
     
-    // Method to convert the coordinate values to integers 
+    // Method to convert the ship setup coordinate values to integers 
     
     String input;
     boolean validEntry = false;
     int y = 0; 
     int x = 0;
     int[] coordinates = new int[3];
-    
-    
     
     do {
       input = In.getString(); // User input 
@@ -176,11 +181,9 @@ class Battleship
           System.out.println("Error: Invalid coordinates. Please enter new coordinates. Ex: HA4");
         }
       } else { // Entry is not 3 characters long 
-        System.out.println("Error: Entry must be 3 characters long. Ex: VH6");
+        System.out.println("Error: Entry must be 3 characters long. Please enter new coordinates. Ex: VH6");
       }
     } while (validEntry == false);  // Loops until the user enters a valid coordinate
-    
-    
     
     coordinates[1] = y;
     coordinates[2] = x;
@@ -284,7 +287,7 @@ class Battleship
         int y = (generate.nextInt(7)) + 1;
         
         // Genterates eitehr 0 or 1 to determine if the ship is horizontal or vertical 
-        int direction = generate.nextInt(1); 
+        int direction = generate.nextInt(2); 
         boolean horizontal = false;
         
         // Checks if the direction is horizontal 
@@ -346,34 +349,97 @@ class Battleship
           }
           added = true;
         }
-          
-          
-          
-        }
       }
-
-      return board;
-      
     }
     
-    public static void c()//int userChoice()
-    {
-      
-      // Method which handles the user choice of attack
-      
-    }
-    public static void d()// int cpuChoice()
-    {
-      
-      // Method which handles the computer choice of attack 
-      
-    }
-    
-    public static void printScore()
-    {
-      
-      // Method used to display the score 
-      
-    }
+    return board;
     
   }
+  
+  public static int[][] userChoice(int[][] board)
+  {
+    
+    // Method which handles the user choice of attack
+    
+    int [] coordinates = new int[2];
+    boolean isValid = false;
+    
+    do { 
+      
+      System.out.println("Enter the coordinates you wish to shoot. Ex: B4");
+      coordinates = lettersToInt(); // User entry is handled in the lettersToInt method 
+      
+      if (board[coordinates[0]][coordinates[1]] != 0 && board[coordinates[0]][coordinates[1]] != 4) { // The cell is occupied 
+        System.out.println("Error: The coordinates have already been entered. Enter new coordinates.");
+      } else { // The cell is unoccupied 
+        isValid = true;
+        // Checks if the user missed, hit, or sunk a ship 
+        if (board[coordinates[0]][coordinates[1]] == 0) { // Miss
+          System.out.println("Miss!");
+          board[coordinates[0]][coordinates[1]] = 1; 
+        } else if (board[coordinates[0]][coordinates[1]] == 4) { // Hit 
+          System.out.println("Hit!");
+          board[coordinates[0]][coordinates[1]] = 2;
+        }
+      }
+    } while (isValid == false); // Loops until the user enters a valid cell 
+    
+    return board;
+    
+  }
+  public static void d()// int cpuChoice()
+  {
+    
+    // Method which handles the computer choice of attack 
+    
+  }
+  
+  public static int[] lettersToInt()
+  {
+    
+    // Method to convert the coordinate values to integers for the user 
+    
+    String input;
+    boolean validEntry = false;
+    int y = 0; 
+    int x = 0;
+    int[] coordinates = new int[2];
+    
+    do {
+      input = In.getString(); // User input 
+      
+      if (input.length() == 2) { // Checks if the entry is two characters long 
+        do {
+          char yChar = input.charAt(0);
+          char xChar = input.charAt(1);
+          yChar = Character.toLowerCase(yChar);
+          if ((yChar >= 'a' && yChar <= 'h') && (xChar >= '1' && xChar <= '8')) { // Checks if the input is only 2 characters long, the y-coordinate is a letter from a-h and if the x-coordinate is a number from 1-8
+            y = yChar - 'a' + 1; // Converts the y char value to an inth
+            x = Character.getNumericValue(xChar); // Converts the x char value to an int 
+            validEntry = true;
+          } else { // Invalid input 
+            System.out.println("Error: Invalid coordinates. Please enter new coordinates. Ex: A4");
+          }
+        } while (validEntry == false);  // Loops until the user enters a valid coordinate
+      } else {
+        // Entry is not 2 characters long 
+        System.out.println("Error: Entry must be 2 characters long. Please enter new coordinates. Ex: H7. ");
+      }
+    } while (input.length() != 2);
+    
+    coordinates[0] = y;
+    coordinates[1] = x;
+    
+    return coordinates;
+    
+    
+  }
+  
+  public static void printScore()
+  {
+    
+    // Method used to display the score 
+    
+  }
+  
+}
