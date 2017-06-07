@@ -7,6 +7,8 @@
  This program is a playable version of the board game Battleship made in Java 
  */
 
+import java.util.Random;
+
 class Battleship 
 {
   public static void main(String[] args)
@@ -34,8 +36,11 @@ class Battleship
     int[][] board2 = new int[9][9];
     
     printBoard(board, board2);
-    board = userSetup();
-    printBoard(board, board2);
+    board = userSetup(); // Method to handle the user ship setup
+    board2 = cpuSetup(board2); // Method to handle the CPU ship setup 
+    printBoard(board, board2); // Displays the3 boad to the user 
+    
+    
     
     
   }
@@ -83,6 +88,8 @@ class Battleship
           System.out.print("X"); 
         } else if (board2[y][x] == 3) { // Sunken CPU ship
           System.out.print("|");
+        } else if (board2[y][x] == 4) { //CPU ship, not seen by the yser
+          System.out.print("~");
         }
         System.out.print(" "); // Spacing   
       }
@@ -107,41 +114,34 @@ class Battleship
     System.out.println("Entry must be entered in the following format: <(V)ertical/(H)orizontal> <Y-Axis> <X-Axis> Examples: VC5, HG5");
     
     System.out.println("Enter the coordinates to place your Aircraft Carrier (1x5). Ex: HA4");
-    entry0 = lettersToInt(); // User entry is handled in the lettersToInt method 
-    shipSize = 5; // Indicates the ship size (in this case 4 long)
+    entry0 = lettersToIntSetup(); // User entry is handled in the lettersToIntSetup method 
+    shipSize = 5; // Indicates the ship size (in this case 5 long)
     
     board = setupUserError(entry0, board, shipSize); // Sends some variables to the setupUserError method to check if the ship is illegally placed 
     
     System.out.println("Enter the coordinates to place your Battleship (1x4). Ex: HA4");
-    entry1 = lettersToInt(); // User entry is handled in the lettersToInt method 
+    entry1 = lettersToIntSetup(); // User entry is handled in the lettersToIntSetup method 
     shipSize = 4; // Indicates the ship size (in this case 4 long)
     
     board = setupUserError(entry1, board, shipSize); // Sends some variables to the setupUserError method to check if the ship is illegally placed 
     
     System.out.println("Enter the coordinates to place your Submarine (1x3). Ex: HA4");
-    entry2 = lettersToInt(); // User entry is handled in the lettersToInt method 
-    shipSize = 3; // Indicates the ship size (in this case 4 long)
+    entry2 = lettersToIntSetup(); // User entry is handled in the lettersToIntSetup method 
+    shipSize = 3; // Indicates the ship size (in this case 3 long)
     
     board = setupUserError(entry2, board, shipSize); // Sends some variables to the setupUserError method to check if the ship is illegally placed 
     
     System.out.println("Enter the coordinates to place your Patrol Boat (1x2). Ex: HA4");
-    entry3 = lettersToInt(); // User entry is handled in the lettersToInt method 
-    shipSize = 2; // Indicates the ship size (in this case 4 long)
+    entry3 = lettersToIntSetup(); // User entry is handled in the lettersToIntSetup method 
+    shipSize = 2; // Indicates the ship size (in this case 2 long)
     
     board = setupUserError(entry3, board, shipSize); // Sends some variables to the setupUserError method to check if the ship is illegally placed 
-
+    
     return board;
     
   }
   
-  public static void cpuSetup()
-  {
-    
-    // Method where the computer makes their initial ship setup 
-    
-  }
-  
-  public static int[] lettersToInt()
+  public static int[] lettersToIntSetup()
   {
     
     // Method to convert the coordinate values to integers 
@@ -190,10 +190,10 @@ class Battleship
     
   }
   
-  public static int[][] setupUserError(int[] entry, int[][] board, int shipSize)//boolean setupUserError()
+  public static int[][] setupUserError(int[] entry, int[][] board, int shipSize)
   {
     
-    // Method which checks if suer boats overlap or are placed in invalid locations
+    // Method which checks if user boats overlap or are placed in invalid locations
     boolean added = false; 
     
     // Loops until the ship has been added 
@@ -209,21 +209,21 @@ class Battleship
             // Ship goes out of the board 
             hasSpace = false;
             System.out.println("Error: Ship cannot go out of the board. Enter a new input. Ex: HB7");
-            entry = lettersToInt(); // User enters a new input 
+            entry = lettersToIntSetup(); // User enters a new input 
             break; 
           }
           if (board[entry[1]][entry[2]+i] != 0) {
             // Checks if this area is occupied by another ship
             hasSpace = false;
             System.out.println("Error: Ships cannot overlap. Enter a new input. Ex: HB7");
-            entry = lettersToInt(); // User enters a new input 
+            entry = lettersToIntSetup(); // User enters a new input 
             break;
           }
         }
         if (!hasSpace) { 
-          // Method continues if there is no space for the ship
+          // No space found, checks again 
           continue;
-        }
+        } 
         for (int i = 0; i < shipSize; i++) {
           board[entry[1]][entry[2]+i] = 4; // Sets the position values to 4 which indicates a ship
         }
@@ -239,19 +239,19 @@ class Battleship
             // Ship goes out of the board 
             hasSpace = false;
             System.out.println("Error: Ship cannot go out of the board. Enter a new input. Ex: HB7");
-            entry = lettersToInt(); // User enters a new input 
+            entry = lettersToIntSetup(); // User enters a new input 
             break;
           }
           if (board[entry[1]+i][entry[2]] != 0) {
             // Checks if this area is occupied by another ship
             hasSpace = false;
             System.out.println("Error: Ships cannot overlap. Enter a new input. Ex: HB7");
-            entry = lettersToInt(); // User enters a new input 
+            entry = lettersToIntSetup(); // User enters a new input 
             break;
           }
         }
         if (!hasSpace) {
-          // Method continues if there is no space for the ship
+          // No space found, checks again 
           continue;
         }
         for (int i = 0; i < shipSize; i++) {
@@ -265,31 +265,115 @@ class Battleship
     
   }
   
-  public static void b()//boolean setupCpuError()
+  public static int[][] cpuSetup(int[][] board)
   {
     
-    // Method which checks if computer boats overlap or are placed in invalid locations
+    // Method where the computer makes their initial ship setup 
+    int[] shipSize = {5, 4, 3, 2}; // Array for the ship sizes 
+    
+    for (int ship : shipSize) { // Loop continues for each ship 
+      
+      boolean added = false; 
+      
+      // Loops until the ship has been added 
+      while (!added) {
+        Random generate = new Random();
+        
+        // Generates random numbers for the x and y values 
+        int x = (generate.nextInt(7)) + 1;
+        int y = (generate.nextInt(7)) + 1;
+        
+        // Genterates eitehr 0 or 1 to determine if the ship is horizontal or vertical 
+        int direction = generate.nextInt(1); 
+        boolean horizontal = false;
+        
+        // Checks if the direction is horizontal 
+        if (direction == 0) {
+          horizontal = true;
+        }
+        
+        if (horizontal) { // Checks for available space if the ship is horizontal 
+          
+          boolean hasSpace = true;
+          
+          for (int i = 0; i < ship; i ++) { 
+            
+            // Checks if the ship fits on the board horizontally (Does not go out of bounds)
+            if (x + i >= 9) {
+              // Ship goes out of the board 
+              hasSpace = false;
+              break;
+            }
+            if (board[y][x+i] != 0) {
+              // Checks if this area is occupied by another ship
+              hasSpace = false;
+              break;
+            }
+          }
+          if (!hasSpace) { 
+            // No space found, checks again 
+            continue;
+          }
+          for (int i = 0; i < ship; i++) {
+            board[y][x+i] = 4; // Sets the position values to 4 which indicates a ship
+          }
+          added = true;
+          
+        } else { // Ship is placed vertically 
+          
+          boolean hasSpace = true; 
+          
+          for (int i = 0; i < ship; i ++) { 
+            
+            // Checks if the ship fits on the board vertically (Does not go out of bounds)
+            if (y + i >= 9) { 
+              // Ship goes out of the board 
+              hasSpace = false;
+              break;
+            }
+            if (board[y+i][x] != 0) {
+              // Checks if this area is occupied by another ship
+              hasSpace = false;
+              break;
+            }
+          }
+          if (!hasSpace) { 
+            // No space found, checks again 
+            continue;
+          }
+          for (int i = 0; i < ship; i++) {
+            board[y+i][x] = 4; // Sets the position values to 4 which indicates a ship
+          }
+          added = true;
+        }
+          
+          
+          
+        }
+      }
+
+      return board;
+      
+    }
+    
+    public static void c()//int userChoice()
+    {
+      
+      // Method which handles the user choice of attack
+      
+    }
+    public static void d()// int cpuChoice()
+    {
+      
+      // Method which handles the computer choice of attack 
+      
+    }
+    
+    public static void printScore()
+    {
+      
+      // Method used to display the score 
+      
+    }
     
   }
-  
-  public static void c()//int userChoice()
-  {
-    
-    // Method which handles the user choice of attack
-    
-  }
-  public static void d()// int cpuChoice()
-  {
-    
-    // Method which handles the computer choice of attack 
-    
-  }
-  
-  public static void printScore()
-  {
-    
-    // Method used to display the score 
-    
-  }
-  
-}
