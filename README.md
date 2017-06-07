@@ -10,3 +10,4 @@ To do list:
 - | vetical sink, - Horizontal sink
 - Point system and or leaderboard at the end (timer?)
 - Shot accuracy
+- Shots/Hits/Misses
