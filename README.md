@@ -6,8 +6,7 @@ To do list:
 - Make a cool UI at the beginnning including a ship and cool text 
 - Legend in the rules 
 - Present a summary of the CPU's turn
-- "~" for empty space, O for a miss, X for a hit | for sunk, # for boat 
-- | vetical sink, - Horizontal sink
+- "~" for empty space, O for a miss, X for a hit % or * for sunk, # for boat 
 - Point system and or leaderboard at the end (timer?)
 - Shot accuracy
 - Shots/Hits/Misses
