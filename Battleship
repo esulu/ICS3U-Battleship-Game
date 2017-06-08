@@ -34,10 +34,18 @@ class Battleship
     
     int[][] board = new int[9][9]; // Initializes an 8x8 game board
     int[][] board2 = new int[9][9];
+    String[] ship1 = new String[5]; // Initializes the arrays which hold the coordinates of each ship
+    String[] ship2 = new String[4];
+    String[] ship3 = new String[3];
+    String[] ship4 = new String[2];
+    Object[] temp = new Object[5];
     boolean gameEnd = false; 
     
+    printBoard(board, board2);
     board = userSetup(); // Method to handle the user ship setup
-    board2 = cpuSetup(board2); // Method to handle the CPU ship setup 
+    temp = cpuSetup(board2, ship1, ship2, ship3, ship4); // Method to handle the CPU ship setup 
+    board2 = (int[][])temp[0];
+    //ship1 = temp[1];
     printBoard(board, board2); // Displays the boad to the user 
     
     // Loops the turns of the user and the CPU until there is a winner 
@@ -97,7 +105,7 @@ class Battleship
         } else if (board2[y][x] == 3) { // Sunken CPU ship
           System.out.print("|");
         } else if (board2[y][x] == 4) { //CPU ship, not seen by the yser
-          System.out.print("a");
+          System.out.print("#");
         }
         System.out.print(" "); // Spacing   
       }
@@ -269,7 +277,7 @@ class Battleship
     
   }
   
-  public static int[][] cpuSetup(int[][] board)
+  public static Object[] cpuSetup(int[][] board, String[] ship1, String[] ship2, String[] ship3, String[] ship4)
   {
     
     // Method where the computer makes their initial ship setup 
@@ -287,7 +295,7 @@ class Battleship
         int x = (generate.nextInt(8)) + 1;
         int y = (generate.nextInt(8)) + 1;
         
-        // Genterates eitehr 0 or 1 to determine if the ship is horizontal or vertical 
+        // Genterates either 0 or 1 to determine if the ship is horizontal or vertical 
         int direction = generate.nextInt(2); 
         boolean horizontal = false;
         
@@ -320,6 +328,18 @@ class Battleship
           }
           for (int i = 0; i < ship; i++) {
             board[y][x+i] = 4; // Sets the position values to 4 which indicates a ship
+            
+            // Checks which ship is being placed and records the coordinates of them 
+            if (ship == 5) {  
+              ship1[i] = ("" + y + (x + i));
+            } else if (ship == 4) { 
+              ship2[i] = ("" + y + (x + i));
+            } else if (ship == 3) { 
+              ship3[i] = ("" + y + (x + i));
+            } else if (ship == 2) {
+              ship4[i] = ("" + y + (x + i));
+            }
+            
           }
           added = true;
           
@@ -347,13 +367,36 @@ class Battleship
           }
           for (int i = 0; i < ship; i++) {
             board[y+i][x] = 4; // Sets the position values to 4 which indicates a ship
+            
+            // Checks which ship is being placed and records the coordinates of them 
+            if (ship == 5) {  
+              ship1[i] = ("" + (y + i) + x);
+            } else if (ship == 4) { 
+              ship2[i] = ("" + (y + i) + x);
+            } else if (ship == 3) { 
+              ship3[i] = ("" + (y + i) + x);
+            } else if (ship == 2) {
+              ship4[i] = ("" + (y + i) + x);
+            }
+            
           }
           added = true;
         }
       }
     }
     
-    return board;
+    // Creates an object which contains all the arrays that are to be returned
+    Object[] output = new Object[]{board, ship1, ship2, ship3, ship4};
+    
+    /*
+    String[] temp = new String[5];
+    temp = (String[])output[1];
+    
+    for (int i = 0; i <=4; i++) {
+      System.out.println(temp[i]);
+    } */
+    
+    return output;
     
   }
   
@@ -373,7 +416,7 @@ class Battleship
       do { 
         
         coordinates = lettersToInt(); // User entry is handled in the lettersToInt method 
-
+        
         if (board2[coordinates[0]][coordinates[1]] != 0 && board2[coordinates[0]][coordinates[1]] != 4) { // The cell is occupied 
           System.out.println("Error: The coordinates have already been entered. Enter new coordinates.");
           isValid = false;
@@ -441,7 +484,7 @@ class Battleship
     coordinates[1] = x;
     
     return coordinates;
- 
+    
   }
   
   public static void endGame() // boolean endGame(int[][]board, int[][] board2)
