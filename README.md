@@ -10,3 +10,6 @@ To do list:
 - Point system and or leaderboard at the end (timer?)
 - Shot accuracy
 - Shots/Hits/Misses
+
+Check:
+- User sinks AI ships in one turn 
