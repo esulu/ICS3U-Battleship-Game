@@ -10,3 +10,7 @@ To do list:
 - Point system and or leaderboard at the end (timer?)
 - Shot accuracy
 - Shots/Hits/Misses
+
+Error list: 
+- Invalid coordinates give the user the error message but proceed with the CPUs turn 
+- Entry of two numbers triggers two error messages
