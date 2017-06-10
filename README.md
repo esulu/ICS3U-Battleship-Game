@@ -12,4 +12,4 @@ To do list:
 - Shots/Hits/Misses
 
 Error list: 
-- CPU sometimes doesn't take shots
+- CPU sometimes doesn't take shots (Test by putting System.out.println throughout the method)
