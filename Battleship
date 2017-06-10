@@ -45,7 +45,7 @@ class Battleship
     String[] ship4 = new String[2];
     Object[] temp = new Object[5];
     
-    boolean gameEnd = false; 
+    int finalResult; 
     
     printBoard(board, board2);
     userTemp = userSetup(board, userShip1, userShip2, userShip3, userShip4); // Method to handle the user ship setup
@@ -67,14 +67,23 @@ class Battleship
     
     // Loops the turns of the user and the CPU until there is a winner 
     do {
-      System.out.println("Users turn:");
+      System.out.println("Users turn:");  
       board2 = userChoice(board, board2, ship1, ship2, ship3, ship4);
-      board = cpuChoice(board, board2, userShip1, userShip2, userShip3, userShip4);
-      printBoard(board, board2);
-    } while (gameEnd == false);
+      finalResult = endGame(board, board2); // Sends the boards to the gameEnd method to check if the game is over
+      if (finalResult == 2) { // Checks if the user won the game before the CPU's turn begins
+        break;
+      } else { // User didn't win 
+        board = cpuChoice(board, board2, userShip1, userShip2, userShip3, userShip4);
+        printBoard(board, board2);
+        finalResult = endGame(board, board2); // Sends the boards to the gameEnd method to check if the game is over
+      }
+    } while (finalResult  == 0);
     
-    
-    
+    if (finalResult == 1) { // CPU win
+      System.out.println("End of Game. CPU Wins!");
+    } else { // User win
+      System.out.println("End of Game. User Wins!");
+    }
     
   }
   
@@ -436,7 +445,6 @@ class Battleship
     boolean isValid = false;
     int sunk = 0;
     
-    
     do {
       
       do { 
@@ -505,10 +513,9 @@ class Battleship
               
               sunk ++;
               
-            } else if (sunk == 4) { // 4 ships are down
+            } else if (sunk == 4) { // 4 ships are down in one turn 
               hitShip = false; // Hit ship is set to false because the user can no longer take another shot 
-              break;
-              
+              continue;
             } else { // Hit but no ships are sunk
               System.out.println("Hit!");
             }
@@ -522,6 +529,7 @@ class Battleship
     return board2;
     
   }
+  
   public static int[][] cpuChoice(int[][] board, int[][] board2, String[] ship1, String[] ship2, String[] ship3, String[] ship4)
   {
     
@@ -551,7 +559,7 @@ class Battleship
           hitShip = false;
           misses ++;
           board[coordinates[0]][coordinates[1]] = 1; 
-        } else if (board2[coordinates[0]][coordinates[1]] == 4) { // Hit 
+        } else if (board[coordinates[0]][coordinates[1]] == 4) { // Hit 
           hitShip = true;
           hits ++;
           board[coordinates[0]][coordinates[1]] = 2; 
@@ -630,7 +638,7 @@ class Battleship
       if (input.length() == 2) { // Checks if the entry is two characters long 
         char yChar = input.charAt(0);
         char xChar = input.charAt(1);
-
+        
         yChar = Character.toLowerCase(yChar);
         if ((yChar >= 'a' && yChar <= 'h') && (xChar >= '1' && xChar <= '8')) { // Checks if the input is only 2 characters long, the y-coordinate is a letter from a-h and if the x-coordinate is a number from 1-8
           y = yChar - 'a' + 1; // Converts the y char value to an int
@@ -654,10 +662,34 @@ class Battleship
     
   }
   
-  public static void endGame() // boolean endGame(int[][]board, int[][] board2)
+  public static int endGame(int[][]board, int[][] board2)
   {
     
     // Method which loops through the gameboard and checks if any player has no remaining ships then returns the result
+    int spaceCounter1 = 0;
+    int spaceCounter2 = 0;
+    int finalResult = 0;
+    
+    for (int y = 1; y < 9; y ++) {
+      for (int x = 1; x < 9; x ++){ // Board 1 
+        if (board[y][x] == 4) { // Remaining ship cells               
+          spaceCounter1 ++;
+        }
+      }
+      for (int x = 1; x < 9; x ++){ // Board 2
+        if (board2[y][x] == 4) { // Remaining ship cells                       
+          spaceCounter2 ++; 
+        }
+      }
+    } 
+    
+    if (spaceCounter1 == 0) { // No user ships left 
+      finalResult = 1; // finalResult is set to 1, which indicates a CPU win
+    } else if (spaceCounter2 == 0) { // No more CPU ships left 
+      finalResult = 2; // finaResult is set to 2, which indicates a user win 
+    }
+    
+    return finalResult;
     
   }
   
