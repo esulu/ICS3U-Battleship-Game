@@ -34,15 +34,26 @@ class Battleship
     
     int[][] board = new int[9][9]; // Initializes an 8x8 game board
     int[][] board2 = new int[9][9];
-    String[] ship1 = new String[5]; // Initializes the arrays which hold the coordinates of each ship
+    String[] userShip1 = new String[5]; // Initializes the arrays which hold the coordinates of each user ship
+    String[] userShip2 = new String[4];
+    String[] userShip3 = new String[3];
+    String[] userShip4 = new String[2];
+    Object[] userTemp = new Object[5];
+    String[] ship1 = new String[5]; // Initializes the arrays which hold the coordinates of each CPU ship
     String[] ship2 = new String[4];
     String[] ship3 = new String[3];
     String[] ship4 = new String[2];
     Object[] temp = new Object[5];
+    
     boolean gameEnd = false; 
     
     printBoard(board, board2);
-    board = userSetup(); // Method to handle the user ship setup
+    userTemp = userSetup(board, userShip1, userShip2, userShip3, userShip4); // Method to handle the user ship setup
+    board = (int[][])userTemp[0];
+    userShip1 = (String[])userTemp[1];
+    userShip2 = (String[])userTemp[2];
+    userShip3 = (String[])userTemp[3];
+    userShip4 = (String[])userTemp[4];
     
     temp = cpuSetup(board2, ship1, ship2, ship3, ship4); // Method to handle the CPU ship setup 
     board2 = (int[][])temp[0];
@@ -58,8 +69,8 @@ class Battleship
     do {
       System.out.println("Users turn:");
       board2 = userChoice(board, board2, ship1, ship2, ship3, ship4);
-      //board = cpuChoice(board);
-      //printBoard(board, board2);
+      board = cpuChoice(board, board2, userShip1, userShip2, userShip3, userShip4);
+      printBoard(board, board2);
     } while (gameEnd == false);
     
     
@@ -120,11 +131,15 @@ class Battleship
     
   }
   
-  public static int[][] userSetup() //void userSetup()
+  public static Object[] userSetup(int[][] board, String[] ship1, String[] ship2, String[] ship3, String[] ship4) 
   {
     
     // Method where the user makes their initial ship setup 
-    int[][] board = new int[9][9];
+    
+    Object[] temp1 = new Object[2];
+    Object[] temp2 = new Object[2];
+    Object[] temp3 = new Object[2];
+    Object[] temp4 = new Object[2];
     int[] entry0 = new int[3]; // Arrays to hold the inital coordinates of the ships 
     int[] entry1 = new int[3];
     int[] entry2 = new int[3];
@@ -139,27 +154,29 @@ class Battleship
     entry0 = lettersToIntSetup(); // User entry is handled in the lettersToIntSetup method 
     shipSize = 5; // Indicates the ship size (in this case 5 long)
     
-    board = setupUserError(entry0, board, shipSize); // Sends some variables to the setupUserError method to check if the ship is illegally placed 
+    temp1 = setupUserError(entry0, board, shipSize, ship1); // Sends some variables to the setupUserError method to check if the ship is illegally placed 
     
     System.out.println("Enter the coordinates to place your Battleship (1x4). Ex: HA4");
     entry1 = lettersToIntSetup(); // User entry is handled in the lettersToIntSetup method 
     shipSize = 4; // Indicates the ship size (in this case 4 long)
     
-    board = setupUserError(entry1, board, shipSize); // Sends some variables to the setupUserError method to check if the ship is illegally placed 
+    temp2 = setupUserError(entry1, board, shipSize, ship2); // Sends some variables to the setupUserError method to check if the ship is illegally placed 
     
     System.out.println("Enter the coordinates to place your Submarine (1x3). Ex: HA4");
     entry2 = lettersToIntSetup(); // User entry is handled in the lettersToIntSetup method 
     shipSize = 3; // Indicates the ship size (in this case 3 long)
     
-    board = setupUserError(entry2, board, shipSize); // Sends some variables to the setupUserError method to check if the ship is illegally placed 
+    temp3 = setupUserError(entry2, board, shipSize, ship3); // Sends some variables to the setupUserError method to check if the ship is illegally placed 
     
     System.out.println("Enter the coordinates to place your Patrol Boat (1x2). Ex: HA4");
     entry3 = lettersToIntSetup(); // User entry is handled in the lettersToIntSetup method 
     shipSize = 2; // Indicates the ship size (in this case 2 long)
     
-    board = setupUserError(entry3, board, shipSize); // Sends some variables to the setupUserError method to check if the ship is illegally placed 
+    temp4 = setupUserError(entry3, board, shipSize, ship4); // Sends some variables to the setupUserError method to check if the ship is illegally placed 
     
-    return board;
+    Object[] tempFinal = new Object[]{(int[][])temp4[0], (String[])temp1[1], (String[])temp2[1], (String[])temp3[1], (String[])temp4[1]};
+    
+    return tempFinal;
     
   }
   
@@ -208,7 +225,7 @@ class Battleship
     
   }
   
-  public static int[][] setupUserError(int[] entry, int[][] board, int shipSize)
+  public static Object[] setupUserError(int[] entry, int[][] board, int shipSize, String[] ship)
   {
     
     // Method which checks if user boats overlap or are placed in invalid locations
@@ -244,6 +261,10 @@ class Battleship
         } 
         for (int i = 0; i < shipSize; i++) {
           board[entry[1]][entry[2]+i] = 4; // Sets the position values to 4 which indicates a ship
+          
+          // Records the coordinates of the ship being placed
+          ship[i] = ("" + entry[1] + (entry[2] + i));
+          
         }
         added = true;
         
@@ -274,12 +295,19 @@ class Battleship
         }
         for (int i = 0; i < shipSize; i++) {
           board[entry[1]+i][entry[2]] = 4; // Sets the position values to 4 which indicates a ship
+          
+          // Records the coordinates of the ship being placed
+          ship[i] = ("" + (entry[1] + i) + entry[2]);
+          
         }
         added = true;
       }
     }
     
-    return board;
+    // Creates an object which contains all the arrays that are to be returned
+    Object[] output = new Object[]{board, ship};
+    
+    return output;
     
   }
   
@@ -403,7 +431,7 @@ class Battleship
     
     // Method which handles the user choice of attack
     
-    int [] coordinates = new int[2];
+    int[] coordinates = new int[2];
     boolean hitShip = false;
     boolean isValid = false;
     int sunk = 0;
@@ -411,14 +439,14 @@ class Battleship
     
     do {
       
-      System.out.println("Enter the coordinates you wish to shoot. Ex: B4");
-      
       do { 
+        
+        System.out.println("Enter the coordinates you wish to shoot. Ex: B4");
         
         coordinates = lettersToInt(); // User entry is handled in the lettersToInt method 
         
         if (board2[coordinates[0]][coordinates[1]] != 0 && board2[coordinates[0]][coordinates[1]] != 4) { // The cell is occupied 
-          System.out.println("Error: The coordinates have already been entered. Enter new coordinates.");
+          System.out.print("Error: The coordinates have already been entered. ");
           isValid = false;
         } else { // The cell is unoccupied 
           isValid = true;
@@ -455,7 +483,7 @@ class Battleship
               board2[Character.getNumericValue(ship2[3].charAt(0))][Character.getNumericValue(ship2[3].charAt(1))] = 3;
               
               sunk ++;
-                       
+              
             } else if (board2[Character.getNumericValue(ship3[0].charAt(0))][Character.getNumericValue(ship3[0].charAt(1))] == 2 && board2[Character.getNumericValue(ship3[1].charAt(0))][Character.getNumericValue(ship3[1].charAt(1))] == 2 && board2[Character.getNumericValue(ship3[2].charAt(0))][Character.getNumericValue(ship3[2].charAt(1))] == 2) {
               // Checks if the Submarine sunk
               System.out.println("You sunk the enemy Submarine!");
@@ -484,21 +512,105 @@ class Battleship
             } else { // Hit but no ships are sunk
               System.out.println("Hit!");
             }
+            printBoard(board, board2);
           }
         }
-      } while (isValid == false); // Loops until the user enters a valid cell 
+      } while (hitShip == true); // Loop ends when the user misses a shot 
       
-      printBoard(board, board2); 
-      
-    } while (hitShip == true); // Loop ends when the user misses a shot 
+    } while (isValid == false); // Loops until the user enters a valid cell 
     
     return board2;
     
   }
-  public static void d()// int[][] cpuChoice(int[][] board, int[][] board2)
+  public static int[][] cpuChoice(int[][] board, int[][] board2, String[] ship1, String[] ship2, String[] ship3, String[] ship4)
   {
     
     // Method which handles the computer choice of attack 
+    
+    int [] coordinates = new int[2];
+    boolean hitShip = false;
+    boolean isValid = false;
+    int hits = 0; 
+    int misses = 0;
+    int sunk = 0;
+    
+    do {
+      
+      Random generate = new Random();
+      
+      // CPU coordinates 
+      coordinates[0] = (generate.nextInt(8)) + 1; 
+      coordinates[1] = (generate.nextInt(8)) + 1;
+      
+      if (board[coordinates[0]][coordinates[1]] != 0 && board[coordinates[0]][coordinates[1]] != 4) { // The cell is occupied 
+        isValid = false;
+      } else { // The cell is unoccupied 
+        isValid = true;
+        // Checks if the CPU missed, hit, or sunk a ship 
+        if (board[coordinates[0]][coordinates[1]] == 0) { // Miss
+          hitShip = false;
+          misses ++;
+          board[coordinates[0]][coordinates[1]] = 1; 
+        } else if (board2[coordinates[0]][coordinates[1]] == 4) { // Hit 
+          hitShip = true;
+          hits ++;
+          board[coordinates[0]][coordinates[1]] = 2; 
+          
+          // Checks if the Aircraft carrier sunk 
+          if (board[Character.getNumericValue(ship1[0].charAt(0))][Character.getNumericValue(ship1[0].charAt(1))] == 2 && board[Character.getNumericValue(ship1[1].charAt(0))][Character.getNumericValue(ship1[1].charAt(1))] == 2 && board[Character.getNumericValue(ship1[2].charAt(0))][Character.getNumericValue(ship1[2].charAt(1))] == 2 && board[Character.getNumericValue(ship1[3].charAt(0))][Character.getNumericValue(ship1[3].charAt(1))] == 2 && board[Character.getNumericValue(ship1[4].charAt(0))][Character.getNumericValue(ship1[4].charAt(1))] == 2) {                                                                         
+            
+            // Changes the values of the CPU ship coordinates to 3 which indiates a sunken ship
+            board[Character.getNumericValue(ship1[0].charAt(0))][Character.getNumericValue(ship1[0].charAt(1))] = 3; 
+            board[Character.getNumericValue(ship1[1].charAt(0))][Character.getNumericValue(ship1[1].charAt(1))] = 3; 
+            board[Character.getNumericValue(ship1[2].charAt(0))][Character.getNumericValue(ship1[2].charAt(1))] = 3; 
+            board[Character.getNumericValue(ship1[3].charAt(0))][Character.getNumericValue(ship1[3].charAt(1))] = 3; 
+            board[Character.getNumericValue(ship1[4].charAt(0))][Character.getNumericValue(ship1[4].charAt(1))] = 3; 
+            
+            sunk ++;
+            
+          } else if (board[Character.getNumericValue(ship2[0].charAt(0))][Character.getNumericValue(ship2[0].charAt(1))] == 2 && board[Character.getNumericValue(ship2[1].charAt(0))][Character.getNumericValue(ship2[1].charAt(1))] == 2 && board[Character.getNumericValue(ship2[2].charAt(0))][Character.getNumericValue(ship2[2].charAt(1))] == 2 && board[Character.getNumericValue(ship2[3].charAt(0))][Character.getNumericValue(ship2[3].charAt(1))] == 2) {
+            // Checks if the Battleship sunk
+            
+            // Changes the values of the CPU ship coordinates to 3 which indiates a sunken ship
+            board[Character.getNumericValue(ship2[0].charAt(0))][Character.getNumericValue(ship2[0].charAt(1))] = 3;
+            board[Character.getNumericValue(ship2[1].charAt(0))][Character.getNumericValue(ship2[1].charAt(1))] = 3;
+            board[Character.getNumericValue(ship2[2].charAt(0))][Character.getNumericValue(ship2[2].charAt(1))] = 3;
+            board[Character.getNumericValue(ship2[3].charAt(0))][Character.getNumericValue(ship2[3].charAt(1))] = 3;
+            
+            sunk ++;
+            
+          } else if (board[Character.getNumericValue(ship3[0].charAt(0))][Character.getNumericValue(ship3[0].charAt(1))] == 2 && board[Character.getNumericValue(ship3[1].charAt(0))][Character.getNumericValue(ship3[1].charAt(1))] == 2 && board[Character.getNumericValue(ship3[2].charAt(0))][Character.getNumericValue(ship3[2].charAt(1))] == 2) {
+            // Checks if the Submarine sunk
+            
+            // Changes the values of the CPU ship coordinates to 3 which indiates a sunken ship
+            board[Character.getNumericValue(ship3[0].charAt(0))][Character.getNumericValue(ship3[0].charAt(1))] = 3; 
+            board[Character.getNumericValue(ship3[1].charAt(0))][Character.getNumericValue(ship3[1].charAt(1))] = 3; 
+            board[Character.getNumericValue(ship3[2].charAt(0))][Character.getNumericValue(ship3[2].charAt(1))] = 3; 
+            
+            sunk ++;
+            
+          } else if (board[Character.getNumericValue(ship4[0].charAt(0))][Character.getNumericValue(ship4[0].charAt(1))] == 2 && board[Character.getNumericValue(ship4[1].charAt(0))][Character.getNumericValue(ship4[1].charAt(1))] == 2) {
+            // Checks if the Patrol Boat sunk
+            
+            // Changes the values of the CPU ship coordinates to 3 which indiates a sunken ship
+            board[Character.getNumericValue(ship4[0].charAt(0))][Character.getNumericValue(ship4[0].charAt(1))] = 3; 
+            board[Character.getNumericValue(ship4[1].charAt(0))][Character.getNumericValue(ship4[1].charAt(1))] = 3; 
+            
+            sunk ++;
+            
+          } else if (sunk == 4) { // 4 ships are down
+            hitShip = false; // Hit ship is set to false because the CPU can no longer take another shot 
+            break;
+          }
+        }
+      }
+      
+    } while (hitShip == true && isValid == true); // Loop ends when the CPU misses a shot or if they entered an occupied cell 
+    
+    System.out.println("End of CPU turn. End of turn results: ");
+    System.out.println("Shots: " + (misses + hits) + " Misses: " + misses + " Hits: " + hits); 
+    
+    return board;
     
   }
   
@@ -518,6 +630,7 @@ class Battleship
       if (input.length() == 2) { // Checks if the entry is two characters long 
         char yChar = input.charAt(0);
         char xChar = input.charAt(1);
+
         yChar = Character.toLowerCase(yChar);
         if ((yChar >= 'a' && yChar <= 'h') && (xChar >= '1' && xChar <= '8')) { // Checks if the input is only 2 characters long, the y-coordinate is a letter from a-h and if the x-coordinate is a number from 1-8
           y = yChar - 'a' + 1; // Converts the y char value to an int
@@ -530,8 +643,9 @@ class Battleship
       } else {
         // Entry is not 2 characters long 
         System.out.println("Error: Entry must be 2 characters long. Please enter new coordinates. Ex: H7.");
+        validEntry = false;
       }
-    } while (input.length() != 2 && validEntry == false); // Loops until the user input is 2 characters long and when user enters a valid coordinate
+    } while (validEntry == false); // Loops until the user input is 2 characters long and when user enters a valid coordinate
     
     coordinates[0] = y;
     coordinates[1] = x;
