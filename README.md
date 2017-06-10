@@ -10,6 +10,3 @@ To do list:
 - Point system and or leaderboard at the end (timer?)
 - Shot accuracy
 - Shots/Hits/Misses
-
-Error list: 
-- CPU sometimes doesn't take shots (Test by putting System.out.println throughout the method)
