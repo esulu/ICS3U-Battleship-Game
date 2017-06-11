@@ -533,6 +533,8 @@ class Battleship
     int [] coordinates = new int[2];
     boolean hitShip = false;
     boolean isValid = false;
+    boolean sunkenShip = false;
+    String shipName = "";
     int hits = 0; 
     int misses = 0;
     int isGameOver = 0;
@@ -570,6 +572,9 @@ class Battleship
               board[Character.getNumericValue(ship1[3].charAt(0))][Character.getNumericValue(ship1[3].charAt(1))] = 3; 
               board[Character.getNumericValue(ship1[4].charAt(0))][Character.getNumericValue(ship1[4].charAt(1))] = 3; 
               
+              sunkenShip = true; 
+              shipName += "Aircraft Carrier ";
+              
             } else if (board[Character.getNumericValue(ship2[0].charAt(0))][Character.getNumericValue(ship2[0].charAt(1))] == 2 && board[Character.getNumericValue(ship2[1].charAt(0))][Character.getNumericValue(ship2[1].charAt(1))] == 2 && board[Character.getNumericValue(ship2[2].charAt(0))][Character.getNumericValue(ship2[2].charAt(1))] == 2 && board[Character.getNumericValue(ship2[3].charAt(0))][Character.getNumericValue(ship2[3].charAt(1))] == 2) {
               // Checks if the Battleship sunk
               
@@ -579,6 +584,9 @@ class Battleship
               board[Character.getNumericValue(ship2[2].charAt(0))][Character.getNumericValue(ship2[2].charAt(1))] = 3;
               board[Character.getNumericValue(ship2[3].charAt(0))][Character.getNumericValue(ship2[3].charAt(1))] = 3;
               
+              sunkenShip = true; 
+              shipName += "Battleship ";
+              
             } else if (board[Character.getNumericValue(ship3[0].charAt(0))][Character.getNumericValue(ship3[0].charAt(1))] == 2 && board[Character.getNumericValue(ship3[1].charAt(0))][Character.getNumericValue(ship3[1].charAt(1))] == 2 && board[Character.getNumericValue(ship3[2].charAt(0))][Character.getNumericValue(ship3[2].charAt(1))] == 2) {
               // Checks if the Submarine sunk
               
@@ -587,12 +595,18 @@ class Battleship
               board[Character.getNumericValue(ship3[1].charAt(0))][Character.getNumericValue(ship3[1].charAt(1))] = 3; 
               board[Character.getNumericValue(ship3[2].charAt(0))][Character.getNumericValue(ship3[2].charAt(1))] = 3; 
               
+              sunkenShip = true; 
+              shipName += "Submarine ";
+              
             } else if (board[Character.getNumericValue(ship4[0].charAt(0))][Character.getNumericValue(ship4[0].charAt(1))] == 2 && board[Character.getNumericValue(ship4[1].charAt(0))][Character.getNumericValue(ship4[1].charAt(1))] == 2) {
               // Checks if the Patrol Boat sunk
               
               // Changes the values of the CPU ship coordinates to 3 which indiates a sunken ship
               board[Character.getNumericValue(ship4[0].charAt(0))][Character.getNumericValue(ship4[0].charAt(1))] = 3; 
               board[Character.getNumericValue(ship4[1].charAt(0))][Character.getNumericValue(ship4[1].charAt(1))] = 3; 
+              
+              sunkenShip = true; 
+              shipName += "Patrol boat ";
               
             } 
             isGameOver = endGame(board, board2); // Checks if the CPU took out all the user ships 
@@ -605,8 +619,12 @@ class Battleship
       
     } while (isValid == false); // Loop ends when the CPU enters an occupied cell 
     
-    System.out.println("End of CPU turn. End of turn results: ");
+    System.out.println("End of CPU turn. Results: ");
     System.out.println("Shots: " + (misses + hits) + " Misses: " + misses + " Hits: " + hits); 
+    
+    if (sunkenShip == true) { // Checks if the CPU sunk a user ship 
+      System.out.println("Sunken ship(s): " + shipName);
+    }
     
     return board;
     
