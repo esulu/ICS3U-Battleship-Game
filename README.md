@@ -7,4 +7,5 @@ To do list:
 - Shot accuracy
 - Shots/Hits/Misses
 - Un-comment the ship 
-- Print the board for each user ship entry 
+- Print the board for each user ship entry
+- trim user entries
