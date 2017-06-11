@@ -14,16 +14,76 @@ class Battleship
   public static void main(String[] args)
   {
     
-    // Main method will act as the main connector of different methods 
-    // Gives the user some options on whether they want to play or see the rulse 
+    // Gives the user options on whether they want to play or see the rules
     
-    playGame();
+    String input; 
+    boolean validEntry = false;
+    
+    System.out.println("Welcome to Battleship, a Java game made by Eren Sulutas."); /*
+     System.out.println("                                     # #  ( )");
+     System.out.println("                                  ___#_#___|__");
+     System.out.println("                              _  |____________|  _");
+     System.out.println("                       _=====| | |            | | |==== _");
+     System.out.println("                 =====| |.---------------------------. | |====");
+     System.out.println("   <--------------------'   .  .  .  .  .  .  .  .   '--------------/");
+     System.out.println("     \\                                                             /");
+     System.out.println("      \\___________________________________________________________/");
+     System.out.println("  wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww");
+     System.out.println("wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww");
+     System.out.println("   wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww");   */
+    
+    System.out.println("\nEnter \"r\" to see the rules and the gameboard legend or \"p\" to play the game.");
+    
+    do {
+      input = In.getString();
+      input = input.toLowerCase();
+      if (input.equals("r")) { // User wants to see the rules 
+        printRules();
+      } else if (input.equals("p")) { // User wants the play the game 
+        playGame();
+        validEntry = true;
+      } else { // User enters an invalid input 
+        System.out.println("Error: Invalid input. Enter \"r\" to see the rules and the gameboard legend or \"p\" to play the game.");
+        validEntry = false;
+      }
+      
+    } while (validEntry == false); // Loop ends until the user enters a valid entry 
+    
   }
   
   public static void printRules()
   {
     
     // Displays the instructions on how to play the game to the user 
+    
+    System.out.println("\nGame Objective");
+    System.out.println("\nThis version of Battleship is exclusively against a computer or CPU.");
+    System.out.println("The object of Battleship is to try and sink all of the CPU's ships before they sink all of your ships. All of the CPU's ships are somewhere on its board.");
+    System.out.println("You try and hit them by entering the coordinates of one of the squares on the board. The CPU also tries to hit your ships.");
+    System.out.println("The defense portion of the board marks your ships and the CPU's attempted shots. The offence portion of the board marks empty spaces where you will try to shoot the CPU's ships.");
+    System.out.println("Each player has 4 ships, an Aircraft Carrier (1x5), a Battleship (1x4), a Submarine (1x3), and a Patrol Boat (1x2).");
+    
+    System.out.println("\nBoard Legend: ");
+    System.out.println("~ Empty space");
+    System.out.println("O Missed shot");
+    System.out.println("X Hit shot");
+    System.out.println("* Sunken ship");
+    System.out.println("# User ship (Can only be seen by you)");
+    
+    System.out.println("\nSample board layout:\n");
+    
+    System.out.println("      Defense            Offense"); 
+    System.out.println("  1 2 3 4 5 6 7 8    1 2 3 4 5 6 7 8");
+    System.out.println("A ~ ~ ~ ~ # # # #  A ~ ~ ~ ~ ~ ~ ~ ~");
+    System.out.println("B ~ # ~ ~ O ~ ~ ~  B ~ ~ ~ * * * * ~");  
+    System.out.println("C ~ # ~ ~ ~ ~ ~ ~  C ~ O ~ ~ ~ ~ ~ ~");
+    System.out.println("D ~ # ~ ~ # # # ~  D ~ ~ X X O ~ ~ ~"); 
+    System.out.println("E ~ # ~ ~ ~ ~ ~ ~  E ~ ~ ~ ~ ~ ~ ~ ~");  
+    System.out.println("F ~ # ~ ~ ~ ~ # ~  F ~ ~ ~ ~ ~ ~ ~ ~");  
+    System.out.println("G ~ ~ ~ O ~ ~ # ~  G ~ O ~ ~ ~ O ~ ~"); 
+    System.out.println("H ~ O ~ ~ ~ ~ ~ ~  H ~ ~ ~ ~ ~ ~ ~ ~");
+    
+    System.out.println("\nEnter \"p\" to start the game.");
     
   }
   
@@ -47,7 +107,6 @@ class Battleship
     
     int finalResult; 
     
-    printBoard(board, board2);
     userTemp = userSetup(board, userShip1, userShip2, userShip3, userShip4); // Method to handle the user ship setup
     board = (int[][])userTemp[0];
     userShip1 = (String[])userTemp[1];
@@ -61,10 +120,7 @@ class Battleship
     ship2 = (String[])temp[2];
     ship3 = (String[])temp[3];
     ship4 = (String[])temp[4];
-    
-    
-    printBoard(board, board2); // Displays the boad to the user 
-    
+
     // Loops the turns of the user and the CPU until there is a winner 
     do {
       System.out.println("Users turn:");  
