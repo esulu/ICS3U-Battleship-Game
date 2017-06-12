@@ -15,3 +15,6 @@ Smarter UI:
 - If true, make a random number from 0-3 to determine which of the surrounding cells to shoot at
 - If the cell is valid and unoccupied, set boolean a to false (right before it checks for sunken ships
 - Make sure the surrounding entry does not go out of bounds 
+
+Or:
+- Easy bot (current) and a harder one (increased chance of hitting)
