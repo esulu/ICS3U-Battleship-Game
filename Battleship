@@ -62,6 +62,7 @@ class Battleship
     System.out.println("You try and hit them by entering the coordinates of one of the squares on the board. The CPU also tries to hit your ships.");
     System.out.println("The defense portion of the board marks your ships and the CPU's attempted shots. The offence portion of the board marks empty spaces where you will try to shoot the CPU's ships.");
     System.out.println("Each player has 4 ships, an Aircraft Carrier (1x5), a Battleship (1x4), a Submarine (1x3), and a Patrol Boat (1x2).");
+    System.out.println("Anytime a player gets a hit on their enemy, they may take another shot until they miss or until the game is over.");
     
     System.out.println("\nBoard Legend: ");
     System.out.println("~ Empty space");
@@ -105,9 +106,16 @@ class Battleship
     String[] ship4 = new String[2];
     Object[] temp = new Object[5];
     
+    Object[] tempUser = new Object[3]; // Objects and variables to hold user/cpu preformance stats
+    int hitsUser = 0;
+    int missesUser = 0;
+    Object[] tempCPU = new Object[3];
+    int hitsCPU = 0;
+    int missesCPU = 0;
+    
     int finalResult; 
     
-    userTemp = userSetup(board, userShip1, userShip2, userShip3, userShip4); // Method to handle the user ship setup
+    userTemp = userSetup(board, board2, userShip1, userShip2, userShip3, userShip4); // Method to handle the user ship setup
     board = (int[][])userTemp[0];
     userShip1 = (String[])userTemp[1];
     userShip2 = (String[])userTemp[2];
@@ -120,16 +128,22 @@ class Battleship
     ship2 = (String[])temp[2];
     ship3 = (String[])temp[3];
     ship4 = (String[])temp[4];
-
+    
     // Loops the turns of the user and the CPU until there is a winner 
     do {
       System.out.println("Users turn:");  
-      board2 = userChoice(board, board2, ship1, ship2, ship3, ship4);
+      tempUser = userChoice(board, board2, ship1, ship2, ship3, ship4);
+      board2 = (int[][])tempUser[0];
+      hitsUser += (Integer)tempUser[1];
+      missesUser += (Integer)tempUser[2];
       finalResult = endGame(board, board2); // Sends the boards to the gameEnd method to check if the game is over
       if (finalResult == 2) { // Checks if the user won the game before the CPU's turn begins
         break;
       } else { // User didn't win 
-        board = cpuChoice(board, board2, userShip1, userShip2, userShip3, userShip4);
+        tempCPU = cpuChoice(board, board2, userShip1, userShip2, userShip3, userShip4);
+        board = (int[][])tempCPU[0];
+        hitsCPU += (Integer)tempCPU[1];
+        missesCPU += (Integer)tempCPU[2];
         printBoard(board, board2);
         finalResult = endGame(board, board2); // Sends the boards to the gameEnd method to check if the game is over
       }
@@ -140,6 +154,13 @@ class Battleship
     } else { // User win
       System.out.println("End of Game. User Wins!");
     }
+    
+    System.out.println("\nFinal Stats:");
+    System.out.printf("%-18s %10s %10s %n", " ",  "CPU", "User");
+    System.out.printf("%-18s %10s %10s %n", "Hits:", hitsCPU, hitsUser);
+    System.out.printf("%-18s %10s %10s %n", "Misses:", missesCPU, missesUser);
+    System.out.printf("%-18s %10s %10s %n", "Total shots: ", hitsCPU + missesCPU, hitsUser + missesUser);
+    System.out.printf("%-18s %10s %10s %n", "Shot accuracy(%):", (double)Math.round((double)hitsCPU * 100 / (hitsCPU + missesCPU) * 10) / 10, (double)Math.round((double)hitsUser * 100 / (hitsUser + missesUser) * 10) / 10); // Makes the shot accuracy to a percent and rounds it to 2 decimal places
     
   }
   
@@ -187,7 +208,7 @@ class Battleship
         } else if (board2[y][x] == 3) { // Sunken CPU ship
           System.out.print("*");
         } else if (board2[y][x] == 4) { //CPU ship, not seen by the user
-          System.out.print("#");
+          System.out.print("~");
         }
         System.out.print(" "); // Spacing   
       }
@@ -196,7 +217,7 @@ class Battleship
     
   }
   
-  public static Object[] userSetup(int[][] board, String[] ship1, String[] ship2, String[] ship3, String[] ship4) 
+  public static Object[] userSetup(int[][] board, int[][] board2,  String[] ship1, String[] ship2, String[] ship3, String[] ship4) 
   {
     
     // Method where the user makes their initial ship setup 
@@ -212,14 +233,18 @@ class Battleship
     int shipSize;
     
     System.out.println("\nShip placements: ");
-    System.out.println("The coordinate you enter will be the upper left of the ship.");
-    System.out.println("Entry must be entered in the following format: <(V)ertical/(H)orizontal> <Y-Axis> <X-Axis> Examples: VC5, HG5");
+    System.out.println("\nThe coordinate you enter will be the upper left of the ship.");
+    System.out.println("Entry must be entered in the following format: <(V)ertical/(H)orizontal> <Y-Axis(Letter)> <X-Axis(Number)> Examples: VC5, HG5\n");
     
-    System.out.println("Enter the coordinates to place your Aircraft Carrier (1x5). Ex: HA4");
+    printBoard(board, board2); // Prints an empty board to help the user with his/her ship placesments 
+    
+    System.out.println("\nEnter the coordinates to place your Aircraft Carrier (1x5). Ex: HA4");
     entry0 = lettersToIntSetup(); // User entry is handled in the lettersToIntSetup method 
     shipSize = 5; // Indicates the ship size (in this case 5 long)
     
     temp1 = setupUserError(entry0, board, shipSize, ship1); // Sends some variables to the setupUserError method to check if the ship is illegally placed 
+    
+    printBoard(board, board2); // Prints the updated board containing the user's newly placed ship 
     
     System.out.println("Enter the coordinates to place your Battleship (1x4). Ex: HA4");
     entry1 = lettersToIntSetup(); // User entry is handled in the lettersToIntSetup method 
@@ -227,11 +252,15 @@ class Battleship
     
     temp2 = setupUserError(entry1, board, shipSize, ship2); // Sends some variables to the setupUserError method to check if the ship is illegally placed 
     
+    printBoard(board, board2); // Prints the updated board containing the user's newly placed ship 
+    
     System.out.println("Enter the coordinates to place your Submarine (1x3). Ex: HA4");
     entry2 = lettersToIntSetup(); // User entry is handled in the lettersToIntSetup method 
     shipSize = 3; // Indicates the ship size (in this case 3 long)
     
     temp3 = setupUserError(entry2, board, shipSize, ship3); // Sends some variables to the setupUserError method to check if the ship is illegally placed 
+    
+    printBoard(board, board2); // Prints the updated board containing the user's newly placed ship 
     
     System.out.println("Enter the coordinates to place your Patrol Boat (1x2). Ex: HA4");
     entry3 = lettersToIntSetup(); // User entry is handled in the lettersToIntSetup method 
@@ -239,6 +268,11 @@ class Battleship
     
     temp4 = setupUserError(entry3, board, shipSize, ship4); // Sends some variables to the setupUserError method to check if the ship is illegally placed 
     
+    printBoard(board, board2); // Prints the updated board containing the user's newly placed ship 
+    
+    System.out.println("End of ship placements\n");
+    
+    // Object containing multiple variables which will be returned 
     Object[] tempFinal = new Object[]{(int[][])temp4[0], (String[])temp1[1], (String[])temp2[1], (String[])temp3[1], (String[])temp4[1]};
     
     return tempFinal;
@@ -491,7 +525,7 @@ class Battleship
     
   }
   
-  public static int[][] userChoice(int[][] board, int[][] board2, String[] ship1, String[] ship2, String[] ship3, String[] ship4)
+  public static Object[] userChoice(int[][] board, int[][] board2, String[] ship1, String[] ship2, String[] ship3, String[] ship4)
   {
     
     // Method which handles the user choice of attack
@@ -499,6 +533,8 @@ class Battleship
     int[] coordinates = new int[2];
     boolean hitShip = false;
     boolean isValid = false;
+    int hits = 0; 
+    int misses = 0;
     int isGameOver = 0;
     
     do {
@@ -518,9 +554,11 @@ class Battleship
           if (board2[coordinates[0]][coordinates[1]] == 0) { // Miss
             System.out.println("Miss!");
             hitShip = false;
+            misses ++;
             board2[coordinates[0]][coordinates[1]] = 1; 
           } else if (board2[coordinates[0]][coordinates[1]] == 4) { // Hit 
             hitShip = true;
+            hits ++;
             board2[coordinates[0]][coordinates[1]] = 2;
             
             
@@ -577,11 +615,14 @@ class Battleship
       
     } while (isValid == false); // Loops until the user enters a valid cell 
     
-    return board2;
+    // Creates an object which contains all the veriables that need to be returned
+    Object[] toBeReturned = new Object[]{board2, hits, misses};
+    
+    return toBeReturned;
     
   }
   
-  public static int[][] cpuChoice(int[][] board, int[][] board2, String[] ship1, String[] ship2, String[] ship3, String[] ship4)
+  public static Object[] cpuChoice(int[][] board, int[][] board2, String[] ship1, String[] ship2, String[] ship3, String[] ship4)
   {
     
     // Method which handles the computer choice of attack 
@@ -596,7 +637,8 @@ class Battleship
     int isGameOver = 0;
     
     do {
-      do{
+      
+      do {
         
         Random generate = new Random();
         
@@ -682,7 +724,10 @@ class Battleship
       System.out.println("Sunken ship(s): " + shipName);
     }
     
-    return board;
+    // Creates an object which contains all the veriables that need to be returned
+    Object[] toBeReturned = new Object[]{board, hits, misses};
+    
+    return toBeReturned;
     
   }
   
@@ -699,6 +744,7 @@ class Battleship
     
     do {
       input = In.getString(); // User input 
+      input = input.trim(); // Trims the input of any misplaced spaces at the end or begining
       if (input.length() == 2) { // Checks if the entry is two characters long 
         char yChar = input.charAt(0);
         char xChar = input.charAt(1);
@@ -754,13 +800,6 @@ class Battleship
     }
     
     return finalResult;
-    
-  }
-  
-  public static void printScore()
-  {
-    
-    // Method used to display the score 
     
   }
   
