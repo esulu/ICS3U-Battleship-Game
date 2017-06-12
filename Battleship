@@ -106,12 +106,14 @@ class Battleship
     String[] ship4 = new String[2];
     Object[] temp = new Object[5];
     
-    Object[] tempUser = new Object[3]; // Objects and variables to hold user/cpu preformance stats
+    Object[] tempUser = new Object[4]; // Objects and variables to hold user/cpu preformance stats
     int hitsUser = 0;
     int missesUser = 0;
-    Object[] tempCPU = new Object[3];
+    int sunkUser = 0;
+    Object[] tempCPU = new Object[4];
     int hitsCPU = 0;
     int missesCPU = 0;
+    int sunkCPU = 0;
     
     int finalResult; 
     
@@ -136,6 +138,7 @@ class Battleship
       board2 = (int[][])tempUser[0];
       hitsUser += (Integer)tempUser[1];
       missesUser += (Integer)tempUser[2];
+      sunkUser += (Integer)tempUser[3];
       finalResult = endGame(board, board2); // Sends the boards to the gameEnd method to check if the game is over
       if (finalResult == 2) { // Checks if the user won the game before the CPU's turn begins
         break;
@@ -144,6 +147,7 @@ class Battleship
         board = (int[][])tempCPU[0];
         hitsCPU += (Integer)tempCPU[1];
         missesCPU += (Integer)tempCPU[2];
+        sunkCPU += (Integer)tempCPU[3];
         printBoard(board, board2);
         finalResult = endGame(board, board2); // Sends the boards to the gameEnd method to check if the game is over
       }
@@ -160,7 +164,8 @@ class Battleship
     System.out.printf("%-18s %10s %10s %n", "Hits:", hitsCPU, hitsUser);
     System.out.printf("%-18s %10s %10s %n", "Misses:", missesCPU, missesUser);
     System.out.printf("%-18s %10s %10s %n", "Total shots: ", hitsCPU + missesCPU, hitsUser + missesUser);
-    System.out.printf("%-18s %10s %10s %n", "Shot accuracy(%):", (double)Math.round((double)hitsCPU * 100 / (hitsCPU + missesCPU) * 10) / 10, (double)Math.round((double)hitsUser * 100 / (hitsUser + missesUser) * 10) / 10); // Makes the shot accuracy to a percent and rounds it to 2 decimal places
+    System.out.printf("%-18s %10s %10s %n", "Shot accuracy:", "%" + (double)Math.round((double)hitsCPU * 100 / (hitsCPU + missesCPU) * 10) / 10, "%" + (double)Math.round((double)hitsUser * 100 / (hitsUser + missesUser) * 10) / 10); // Makes the shot accuracy to a percent and rounds it to 2 decimal places
+    System.out.printf("%-18s %10s %10s %n", "Ships sunk:", sunkCPU, sunkUser);
     
   }
   
@@ -536,6 +541,7 @@ class Battleship
     int hits = 0; 
     int misses = 0;
     int isGameOver = 0;
+    int sunk = 0;
     
     do {
       
@@ -573,6 +579,8 @@ class Battleship
               board2[Character.getNumericValue(ship1[3].charAt(0))][Character.getNumericValue(ship1[3].charAt(1))] = 3; 
               board2[Character.getNumericValue(ship1[4].charAt(0))][Character.getNumericValue(ship1[4].charAt(1))] = 3; 
               
+              sunk++;
+              
             } else if (board2[Character.getNumericValue(ship2[0].charAt(0))][Character.getNumericValue(ship2[0].charAt(1))] == 2 && board2[Character.getNumericValue(ship2[1].charAt(0))][Character.getNumericValue(ship2[1].charAt(1))] == 2 && board2[Character.getNumericValue(ship2[2].charAt(0))][Character.getNumericValue(ship2[2].charAt(1))] == 2 && board2[Character.getNumericValue(ship2[3].charAt(0))][Character.getNumericValue(ship2[3].charAt(1))] == 2) {
               // Checks if the Battleship sunk
               System.out.println("You sunk the enemy Battleship!");
@@ -583,6 +591,8 @@ class Battleship
               board2[Character.getNumericValue(ship2[2].charAt(0))][Character.getNumericValue(ship2[2].charAt(1))] = 3;
               board2[Character.getNumericValue(ship2[3].charAt(0))][Character.getNumericValue(ship2[3].charAt(1))] = 3;
               
+              sunk++;
+              
             } else if (board2[Character.getNumericValue(ship3[0].charAt(0))][Character.getNumericValue(ship3[0].charAt(1))] == 2 && board2[Character.getNumericValue(ship3[1].charAt(0))][Character.getNumericValue(ship3[1].charAt(1))] == 2 && board2[Character.getNumericValue(ship3[2].charAt(0))][Character.getNumericValue(ship3[2].charAt(1))] == 2) {
               // Checks if the Submarine sunk
               System.out.println("You sunk the enemy Submarine!");
@@ -592,6 +602,8 @@ class Battleship
               board2[Character.getNumericValue(ship3[1].charAt(0))][Character.getNumericValue(ship3[1].charAt(1))] = 3; 
               board2[Character.getNumericValue(ship3[2].charAt(0))][Character.getNumericValue(ship3[2].charAt(1))] = 3; 
               
+              sunk++;
+              
             } else if (board2[Character.getNumericValue(ship4[0].charAt(0))][Character.getNumericValue(ship4[0].charAt(1))] == 2 && board2[Character.getNumericValue(ship4[1].charAt(0))][Character.getNumericValue(ship4[1].charAt(1))] == 2) {
               // Checks if the Patrol Boat sunk
               System.out.println("You sunk the enemy Patrol Boat!");
@@ -599,6 +611,8 @@ class Battleship
               // Changes the values of the CPU ship coordinates to 3 which indiates a sunken ship
               board2[Character.getNumericValue(ship4[0].charAt(0))][Character.getNumericValue(ship4[0].charAt(1))] = 3; 
               board2[Character.getNumericValue(ship4[1].charAt(0))][Character.getNumericValue(ship4[1].charAt(1))] = 3; 
+              
+              sunk++;
               
             } else { // Hit but no ships are sunk
               System.out.println("Hit!");
@@ -616,7 +630,7 @@ class Battleship
     } while (isValid == false); // Loops until the user enters a valid cell 
     
     // Creates an object which contains all the veriables that need to be returned
-    Object[] toBeReturned = new Object[]{board2, hits, misses};
+    Object[] toBeReturned = new Object[]{board2, hits, misses, sunk};
     
     return toBeReturned;
     
@@ -635,6 +649,7 @@ class Battleship
     int hits = 0; 
     int misses = 0;
     int isGameOver = 0;
+    int sunk = 0;
     
     do {
       
@@ -670,6 +685,8 @@ class Battleship
               board[Character.getNumericValue(ship1[3].charAt(0))][Character.getNumericValue(ship1[3].charAt(1))] = 3; 
               board[Character.getNumericValue(ship1[4].charAt(0))][Character.getNumericValue(ship1[4].charAt(1))] = 3; 
               
+              sunk++;
+              
               sunkenShip = true; 
               shipName += "Aircraft Carrier ";
               
@@ -682,6 +699,8 @@ class Battleship
               board[Character.getNumericValue(ship2[2].charAt(0))][Character.getNumericValue(ship2[2].charAt(1))] = 3;
               board[Character.getNumericValue(ship2[3].charAt(0))][Character.getNumericValue(ship2[3].charAt(1))] = 3;
               
+              sunk++;
+              
               sunkenShip = true; 
               shipName += "Battleship ";
               
@@ -693,6 +712,8 @@ class Battleship
               board[Character.getNumericValue(ship3[1].charAt(0))][Character.getNumericValue(ship3[1].charAt(1))] = 3; 
               board[Character.getNumericValue(ship3[2].charAt(0))][Character.getNumericValue(ship3[2].charAt(1))] = 3; 
               
+              sunk++;
+              
               sunkenShip = true; 
               shipName += "Submarine ";
               
@@ -702,6 +723,8 @@ class Battleship
               // Changes the values of the CPU ship coordinates to 3 which indiates a sunken ship
               board[Character.getNumericValue(ship4[0].charAt(0))][Character.getNumericValue(ship4[0].charAt(1))] = 3; 
               board[Character.getNumericValue(ship4[1].charAt(0))][Character.getNumericValue(ship4[1].charAt(1))] = 3; 
+              
+              sunk++;
               
               sunkenShip = true; 
               shipName += "Patrol boat ";
@@ -725,7 +748,7 @@ class Battleship
     }
     
     // Creates an object which contains all the veriables that need to be returned
-    Object[] toBeReturned = new Object[]{board, hits, misses};
+    Object[] toBeReturned = new Object[]{board, hits, misses, sunk};
     
     return toBeReturned;
     
