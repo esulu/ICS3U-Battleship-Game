@@ -15,5 +15,7 @@ Smarter UI:
 - If the cell is valid and unoccupied, set boolean a to false (right before it checks for sunken ships to make sure it resets each loop)
 - Make sure the surrounding entry does not go out of bounds 
 
+- Check if there's a hit, shoots around the hit spaces 
+
 Or:
 - Easy bot (current) and a harder one (increased chance of hitting)
