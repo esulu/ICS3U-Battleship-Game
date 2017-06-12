@@ -18,6 +18,9 @@ class Battleship
     
     String input; 
     boolean validEntry = false;
+    String playAgainInput = "";
+    boolean playAgain = false;
+    boolean legalEntry = false;
     
     System.out.println("Welcome to Battleship, a Java game made by Eren Sulutas."); /*
      System.out.println("                                     # #  ( )");
@@ -32,22 +35,46 @@ class Battleship
      System.out.println("wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww");
      System.out.println("   wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww");   */
     
-    System.out.println("\nEnter \"r\" to see the rules and the gameboard legend or \"p\" to play the game.");
-    
-    do {
-      input = In.getString();
-      input = input.toLowerCase();
-      if (input.equals("r")) { // User wants to see the rules 
-        printRules();
-      } else if (input.equals("p")) { // User wants the play the game 
-        playGame();
-        validEntry = true;
-      } else { // User enters an invalid input 
-        System.out.println("Error: Invalid input. Enter \"r\" to see the rules and the gameboard legend or \"p\" to play the game.");
-        validEntry = false;
-      }
+    do { // Loop for the entire game 
       
-    } while (validEntry == false); // Loop ends until the user enters a valid entry 
+      System.out.println("\nEnter \"r\" to see the rules and the gameboard legend or \"p\" to play the game.");
+      
+      do {
+        input = In.getString();
+        input = input.toLowerCase();
+        if (input.equals("r")) { // User wants to see the rules 
+          printRules();
+        } else if (input.equals("p")) { // User wants the play the game 
+          playGame();
+          validEntry = true;
+        } else { // User enters an invalid input 
+          System.out.println("Error: Invalid input. Enter \"r\" to see the rules and the gameboard legend or \"p\" to play the game.");
+          validEntry = false;
+        }
+        
+      } while (validEntry == false); // Loop ends until the user enters a valid entry 
+      
+      System.out.println("\nEnd game options:");
+      System.out.println("- Enter 1 to play again");
+      System.out.println("- Enter 2 to stop playing");
+      
+      do {
+        playAgainInput = In.getString();
+        
+        if (playAgainInput.equals("1")) {
+          playAgain = true;
+          legalEntry = true;
+        } else if (playAgainInput.equals("2")) {
+          playAgain = false;
+          legalEntry = true;
+          System.out.println("End of game.");
+        } else {
+          System.out.println("Error: Enter 1 to play again or 2 to stop playing.");
+          legalEntry = false;
+        }
+      } while (legalEntry == false); // Loops until the user enters 1 or 2
+      
+    } while (playAgain == true); // Program restarts if the user wants to play again
     
   }
   
@@ -239,7 +266,7 @@ class Battleship
     
     System.out.println("\nShip placements: ");
     System.out.println("\nThe coordinate you enter will be the upper left of the ship.");
-    System.out.println("Entry must be entered in the following format: <(V)ertical/(H)orizontal> <Y-Axis(Letter)> <X-Axis(Number)> Examples: VC5, HG5\n");
+    System.out.println("Entry must be entered in the following format: <V for vertical/H for horizontal> <Letter> <Number> Examples: VC5, HG5\n");
     
     printBoard(board, board2); // Prints an empty board to help the user with his/her ship placesments 
     
