@@ -20,3 +20,6 @@ V2
 
 Or:
 - Easy bot (current) and a harder one (increased chance of hitting)
+
+Info is ereased after each turn
+Find a way to look at possible areas around if trapped 
