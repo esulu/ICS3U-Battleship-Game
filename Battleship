@@ -22,18 +22,18 @@ class Battleship
     boolean playAgain = false;
     boolean legalEntry = false;
     
-    System.out.println("Welcome to Battleship, a Java game made by Eren Sulutas."); /*
-     System.out.println("                                     # #  ( )");
-     System.out.println("                                  ___#_#___|__");
-     System.out.println("                              _  |____________|  _");
-     System.out.println("                       _=====| | |            | | |==== _");
-     System.out.println("                 =====| |.---------------------------. | |====");
-     System.out.println("   <--------------------'   .  .  .  .  .  .  .  .   '--------------/");
-     System.out.println("     \\                                                             /");
-     System.out.println("      \\___________________________________________________________/");
-     System.out.println("  wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww");
-     System.out.println("wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww");
-     System.out.println("   wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww");   */
+    System.out.println("Welcome to Battleship, a Java game made by Eren Sulutas."); 
+    System.out.println("                                     # #  ( )");
+    System.out.println("                                  ___#_#___|__");
+    System.out.println("                              _  |____________|  _");
+    System.out.println("                       _=====| | |            | | |==== _");
+    System.out.println("                 =====| |.---------------------------. | |====");
+    System.out.println("   <--------------------'   .  .  .  .  .  .  .  .   '--------------/");
+    System.out.println("     \\                                                             /");
+    System.out.println("      \\___________________________________________________________/");
+    System.out.println("  wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww");
+    System.out.println("wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww");
+    System.out.println("   wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww");   
     
     do { // Loop for the entire game 
       
@@ -144,19 +144,20 @@ class Battleship
     
     int finalResult; 
     
-     int difficulty; 
+    int difficulty; 
     boolean validEntry = false;
     
     System.out.println("\nChose the bot difficulty by entering its correspoinding number:");
     System.out.println("1 - Easy: Bot make random shots all the time"
                          + "\n2 - Medium: Bot makes random shots but if hits a ship it shoots around the hit area"
                          + "\n3 - Hard: Bot has a 50% increased chance of not missing shots"
-                         + "\n4 - Very Hard: Bot has a 75% increased change of not missing shots");
+                         + "\n4 - Very Hard: Bot has a 75% increased chance of not missing shots"
+                         + "\n5 - Legendary: Bot has a 90% increased chance of not missing shots");
     
     do {
       difficulty = In.getInt(); // User input 
       
-      if (difficulty == 1 || difficulty == 2 || difficulty == 3 || difficulty == 4) { // Valid entry
+      if (difficulty == 1 || difficulty == 2 || difficulty == 3 || difficulty == 4 || difficulty == 5) { // Valid entry
         validEntry = true;
       } else {
         System.out.println("Error: Invalid input. Please enter a valid input.");
@@ -709,12 +710,12 @@ class Battleship
     boolean valid2 = false;
     boolean valid3 = false;
     boolean valid4 = false;
-
+    
     
     do {
       
       do {
-
+        
         Random generate = new Random();
         
         // CPU coordinates 
@@ -726,204 +727,215 @@ class Battleship
           coordinates[1] = (generate.nextInt(8)) + 1;
           
         } else { // Difficulty is above easy mode 
-        
-        // Checks for hit cells 
-        outerloop:
-          for (int y = 1; y < 9; y ++) {
-          for (int x = 1; x < 9; x ++){ // Board 1
-            if (board[y][x] == 2) { // Hit cell 
-              
-              shipDamaged = true;
-              
-              coordinates[0] = y;
-              coordinates[1] = x;
-              
-              
-              if (coordinates[1] + 1 < 9) {
+          
+          // Checks for hit cells 
+          outerloop:
+            for (int y = 1; y < 9; y ++) {
+            for (int x = 1; x < 9; x ++){ // Board 1
+              if (board[y][x] == 2) { // Hit cell 
                 
-                // Coordinates 1 cell to the right of the hit cell 
-                sourroundingCoordinates1[0] = coordinates[0];
-                sourroundingCoordinates1[1] = coordinates[1] + 1; 
+                shipDamaged = true;
                 
-                valid1 = true;
+                coordinates[0] = y;
+                coordinates[1] = x;
                 
-              } 
-              
-              if (coordinates[1] - 1 > 0) {
                 
-                // Coordinates 1 cell to the left of the hit cell 
-                sourroundingCoordinates2[0] = coordinates[0];
-                sourroundingCoordinates2[1] = coordinates[1] - 1 ;
-                
-                valid2 = true;
-                
-              }
-              
-              if (coordinates[0] + 1 < 9) {
-                
-                // Coordinates 1 cell lower than the hit cell 
-                sourroundingCoordinates3[0] = coordinates[0] + 1;
-                sourroundingCoordinates3[1] = coordinates[1];
-                
-                valid3 = true;
-                
-              }
-              
-              if (coordinates[0] - 1 > 0) {
-                
-                // Coordinates 1 cell higher than the hit cell
-                sourroundingCoordinates4[0] = coordinates[0] - 1;
-                sourroundingCoordinates4[1] = coordinates[1];
-                
-                valid4 = true;
-                
-              }
-              
-              if (valid1 == true || valid2 == true || valid3 == true || valid4 == true) {
-
-                if ((board[sourroundingCoordinates1[0]][sourroundingCoordinates1[1]] == 0 || board[sourroundingCoordinates1[0]][sourroundingCoordinates1[1]] == 4) || (board[sourroundingCoordinates2[0]][sourroundingCoordinates2[1]] == 0 || board[sourroundingCoordinates2[0]][sourroundingCoordinates2[1]] == 4) || (board[sourroundingCoordinates3[0]][sourroundingCoordinates3[1]] == 0 || board[sourroundingCoordinates3[0]][sourroundingCoordinates3[1]] == 4) || (board[sourroundingCoordinates4[0]][sourroundingCoordinates4[1]] == 0 || board[sourroundingCoordinates4[0]][sourroundingCoordinates4[1]] == 4)) {
-                  // Checks if the sourrounding coordinates have been shot or not 
+                if (coordinates[1] + 1 < 9) {
                   
-                  boolean validSpace = false;
+                  // Coordinates 1 cell to the right of the hit cell 
+                  sourroundingCoordinates1[0] = coordinates[0];
+                  sourroundingCoordinates1[1] = coordinates[1] + 1; 
                   
-                  do {
+                  valid1 = true;
+                  
+                } 
+                
+                if (coordinates[1] - 1 > 0) {
+                  
+                  // Coordinates 1 cell to the left of the hit cell 
+                  sourroundingCoordinates2[0] = coordinates[0];
+                  sourroundingCoordinates2[1] = coordinates[1] - 1 ;
+                  
+                  valid2 = true;
+                  
+                }
+                
+                if (coordinates[0] + 1 < 9) {
+                  
+                  // Coordinates 1 cell lower than the hit cell 
+                  sourroundingCoordinates3[0] = coordinates[0] + 1;
+                  sourroundingCoordinates3[1] = coordinates[1];
+                  
+                  valid3 = true;
+                  
+                }
+                
+                if (coordinates[0] - 1 > 0) {
+                  
+                  // Coordinates 1 cell higher than the hit cell
+                  sourroundingCoordinates4[0] = coordinates[0] - 1;
+                  sourroundingCoordinates4[1] = coordinates[1];
+                  
+                  valid4 = true;
+                  
+                }
+                
+                if (valid1 == true || valid2 == true || valid3 == true || valid4 == true) {
+                  
+                  if ((board[sourroundingCoordinates1[0]][sourroundingCoordinates1[1]] == 0 || board[sourroundingCoordinates1[0]][sourroundingCoordinates1[1]] == 4) || (board[sourroundingCoordinates2[0]][sourroundingCoordinates2[1]] == 0 || board[sourroundingCoordinates2[0]][sourroundingCoordinates2[1]] == 4) || (board[sourroundingCoordinates3[0]][sourroundingCoordinates3[1]] == 0 || board[sourroundingCoordinates3[0]][sourroundingCoordinates3[1]] == 4) || (board[sourroundingCoordinates4[0]][sourroundingCoordinates4[1]] == 0 || board[sourroundingCoordinates4[0]][sourroundingCoordinates4[1]] == 4)) {
+                    // Checks if the sourrounding coordinates have been shot or not 
                     
-                    // Genterates a random integer from 0-3 to determine which surrounding area to shoot 
-                    randomInt = generate.nextInt(4);
+                    boolean validSpace = false;
                     
-                    if (randomInt == 0 && valid1 == true) {
-                      validSpace = true;
-                      coordinates[0] = sourroundingCoordinates1[0];
-                      coordinates[1] = sourroundingCoordinates1[1];
-                    } else if (randomInt == 1 & valid2 == true) {
-                      validSpace = true;
-                      coordinates[0] = sourroundingCoordinates2[0];
-                      coordinates[1] = sourroundingCoordinates2[1];
-                    } else if (randomInt == 2 && valid3 == true) {
-                      validSpace = true;
-                      coordinates[0] = sourroundingCoordinates3[0];
-                      coordinates[1] = sourroundingCoordinates3[1];
-                    } else if (randomInt == 3  && valid4 == true) {
-                      validSpace = true;
-                      coordinates[0] = sourroundingCoordinates4[0];
-                      coordinates[1] = sourroundingCoordinates4[1];
-                    }
-                    if (difficulty == 3) { // Checks if it's hard mode 
-                      chance = generate.nextInt(2);
-                      if (chance == 0 && board[coordinates[0]][coordinates[1]] != 4) { // Checks if 0 was randomized and if the coordinates are a miss 
-                        validSpace = false; // Sets validSpace to false, which restarts the randomizer loop if the cell is empty
+                    do {
+                      
+                      // Genterates a random integer from 0-3 to determine which surrounding area to shoot 
+                      randomInt = generate.nextInt(4);
+                      
+                      if (randomInt == 0 && valid1 == true) {
+                        validSpace = true;
+                        coordinates[0] = sourroundingCoordinates1[0];
+                        coordinates[1] = sourroundingCoordinates1[1];
+                      } else if (randomInt == 1 & valid2 == true) {
+                        validSpace = true;
+                        coordinates[0] = sourroundingCoordinates2[0];
+                        coordinates[1] = sourroundingCoordinates2[1];
+                      } else if (randomInt == 2 && valid3 == true) {
+                        validSpace = true;
+                        coordinates[0] = sourroundingCoordinates3[0];
+                        coordinates[1] = sourroundingCoordinates3[1];
+                      } else if (randomInt == 3  && valid4 == true) {
+                        validSpace = true;
+                        coordinates[0] = sourroundingCoordinates4[0];
+                        coordinates[1] = sourroundingCoordinates4[1];
                       }
-                    } else if (difficulty == 4) { // Checks if it's very hard mode 
-                      chance = generate.nextInt(4);
-                      if ((chance == 0 || chance == 1 || chance == 2) && board[coordinates[0]][coordinates[1]] != 4) { // Checks if 0, 1, or 2 was randomized and if the coordinates are a miss 
-                        validSpace = false; // Sets validSpace to false, which restarts the randomizer loop if the cell is empty
+                      if (difficulty == 3) { // Checks if it's hard mode 
+                        chance = generate.nextInt(2);
+                        if (chance == 0 && board[coordinates[0]][coordinates[1]] != 4) { // Checks if 0 was randomized and if the coordinates are a miss 
+                          validSpace = false; // Sets validSpace to false, which restarts the randomizer loop if the cell is empty
+                        }
+                      } else if (difficulty == 4) { // Checks if it's very hard mode 
+                        chance = generate.nextInt(4);
+                        if ((chance == 0 || chance == 1 || chance == 2) && board[coordinates[0]][coordinates[1]] != 4) { // Checks if 0, 1, or 2 was randomized and if the coordinates are a miss 
+                          validSpace = false; // Sets validSpace to false, which restarts the randomizer loop if the cell is empty
+                        }
                       }
-                    }
+                      else if (difficulty == 5) { // Checks if it's legendary mode
+                        chance = generate.nextInt(10);
+                        if ((chance >= 0 && chance <= 8) && board[coordinates[0]][coordinates[1]] != 4) { // Checks if a number from 0-8 was randomized and if the coordinates are a miss
+                          validSpace = false; 
+                        }
+                      }
+                      
+                    } while(validSpace == false); // Loops until a valid entry is entered 
                     
-                  } while(validSpace == false); // Loops until a valid entry is entered 
-                  
-                  break outerloop;
+                    break outerloop;
+                  }
                 }
               }
             }
           }
-        }
-
-          if (shipDamaged == false) { // No cells are hit, proceeds with random generation 
-            coordinates[0] = (generate.nextInt(8)) + 1; 
-            coordinates[1] = (generate.nextInt(8)) + 1;
             
-            if (difficulty == 3) { // Checks if it's hard mode 
-              chance = generate.nextInt(2);
-              if (chance == 0 && board[coordinates[0]][coordinates[1]] != 4) { // Checks if 0 was randomized and if the coordinates are a miss 
-                continue;
-              }
-            } else if (difficulty == 4) { // Checks if it's very hard mode 
-              chance = generate.nextInt(4);
-              if ((chance == 0 || chance == 1 || chance == 2) && board[coordinates[0]][coordinates[1]] != 4) { // Checks if 0, 1, or 2 was randomized and if the coordinates are a miss 
-                continue;
+            if (shipDamaged == false) { // No cells are hit, proceeds with random generation 
+              coordinates[0] = (generate.nextInt(8)) + 1; 
+              coordinates[1] = (generate.nextInt(8)) + 1;
+              
+              if (difficulty == 3) { // Checks if it's hard mode 
+                chance = generate.nextInt(2);
+                if (chance == 0 && board[coordinates[0]][coordinates[1]] != 4) { // Checks if 0 was randomized and if the coordinates are a miss 
+                  continue;
+                }
+              } else if (difficulty == 4) { // Checks if it's very hard mode 
+                chance = generate.nextInt(4);
+                if ((chance == 0 || chance == 1 || chance == 2) && board[coordinates[0]][coordinates[1]] != 4) { // Checks if 0, 1, or 2 was randomized and if the coordinates are a miss 
+                  continue;
+                }
+              } else if (difficulty == 5) { // Checks if it's legendary mode
+                chance = generate.nextInt(10);
+                if ((chance >= 0 && chance <= 8) && board[coordinates[0]][coordinates[1]] != 4) { // Checks if a number from 0-8 was randomized and if the coordinates are a miss
+                  continue;
+                }
               }
             }
+        }
+        
+        if (coordinates[0] < 1 || coordinates[0] > 8 || coordinates[1] < 1 || coordinates[1] > 8 || (board[coordinates[0]][coordinates[1]] != 0 && board[coordinates[0]][coordinates[1]] != 4)) { // The cell is occupied or invalid
+          isValid = false;
+        } else { // The cell is unoccupied 
+          isValid = true;
+          // Checks if the CPU missed, hit, or sunk a ship 
+          if (board[coordinates[0]][coordinates[1]] == 0) { // Miss
+            hitShip = false;
+            misses ++;
+            board[coordinates[0]][coordinates[1]] = 1; 
+          } else if (board[coordinates[0]][coordinates[1]] == 4) { // Hit 
+            hitShip = true;
+            hits ++;
+            board[coordinates[0]][coordinates[1]] = 2; 
+            
+            // Checks if the Aircraft carrier sunk 
+            if (board[Character.getNumericValue(ship1[0].charAt(0))][Character.getNumericValue(ship1[0].charAt(1))] == 2 && board[Character.getNumericValue(ship1[1].charAt(0))][Character.getNumericValue(ship1[1].charAt(1))] == 2 && board[Character.getNumericValue(ship1[2].charAt(0))][Character.getNumericValue(ship1[2].charAt(1))] == 2 && board[Character.getNumericValue(ship1[3].charAt(0))][Character.getNumericValue(ship1[3].charAt(1))] == 2 && board[Character.getNumericValue(ship1[4].charAt(0))][Character.getNumericValue(ship1[4].charAt(1))] == 2) {                                                                         
+              
+              // Changes the values of the CPU ship coordinates to 3 which indiates a sunken ship
+              board[Character.getNumericValue(ship1[0].charAt(0))][Character.getNumericValue(ship1[0].charAt(1))] = 3; 
+              board[Character.getNumericValue(ship1[1].charAt(0))][Character.getNumericValue(ship1[1].charAt(1))] = 3; 
+              board[Character.getNumericValue(ship1[2].charAt(0))][Character.getNumericValue(ship1[2].charAt(1))] = 3; 
+              board[Character.getNumericValue(ship1[3].charAt(0))][Character.getNumericValue(ship1[3].charAt(1))] = 3; 
+              board[Character.getNumericValue(ship1[4].charAt(0))][Character.getNumericValue(ship1[4].charAt(1))] = 3; 
+              
+              sunk++;
+              shipDamaged = false; // shipDamaged is set to false so the CPU stops trying to fire at neighbouring cells 
+              sunkenShip = true; 
+              shipName += "Aircraft Carrier ";
+              
+            } else if (board[Character.getNumericValue(ship2[0].charAt(0))][Character.getNumericValue(ship2[0].charAt(1))] == 2 && board[Character.getNumericValue(ship2[1].charAt(0))][Character.getNumericValue(ship2[1].charAt(1))] == 2 && board[Character.getNumericValue(ship2[2].charAt(0))][Character.getNumericValue(ship2[2].charAt(1))] == 2 && board[Character.getNumericValue(ship2[3].charAt(0))][Character.getNumericValue(ship2[3].charAt(1))] == 2) {
+              // Checks if the Battleship sunk
+              
+              // Changes the values of the CPU ship coordinates to 3 which indiates a sunken ship
+              board[Character.getNumericValue(ship2[0].charAt(0))][Character.getNumericValue(ship2[0].charAt(1))] = 3;
+              board[Character.getNumericValue(ship2[1].charAt(0))][Character.getNumericValue(ship2[1].charAt(1))] = 3;
+              board[Character.getNumericValue(ship2[2].charAt(0))][Character.getNumericValue(ship2[2].charAt(1))] = 3;
+              board[Character.getNumericValue(ship2[3].charAt(0))][Character.getNumericValue(ship2[3].charAt(1))] = 3;
+              
+              sunk++;
+              shipDamaged = false; // shipDamaged is set to false so the CPU stops trying to fire at neighbouring cells 
+              sunkenShip = true; 
+              shipName += "Battleship ";
+              
+            } else if (board[Character.getNumericValue(ship3[0].charAt(0))][Character.getNumericValue(ship3[0].charAt(1))] == 2 && board[Character.getNumericValue(ship3[1].charAt(0))][Character.getNumericValue(ship3[1].charAt(1))] == 2 && board[Character.getNumericValue(ship3[2].charAt(0))][Character.getNumericValue(ship3[2].charAt(1))] == 2) {
+              // Checks if the Submarine sunk
+              
+              // Changes the values of the CPU ship coordinates to 3 which indiates a sunken ship
+              board[Character.getNumericValue(ship3[0].charAt(0))][Character.getNumericValue(ship3[0].charAt(1))] = 3; 
+              board[Character.getNumericValue(ship3[1].charAt(0))][Character.getNumericValue(ship3[1].charAt(1))] = 3; 
+              board[Character.getNumericValue(ship3[2].charAt(0))][Character.getNumericValue(ship3[2].charAt(1))] = 3; 
+              
+              sunk++;
+              shipDamaged = false; // shipDamaged is set to false so the CPU stops trying to fire at neighbouring cells 
+              sunkenShip = true; 
+              shipName += "Submarine ";
+              
+            } else if (board[Character.getNumericValue(ship4[0].charAt(0))][Character.getNumericValue(ship4[0].charAt(1))] == 2 && board[Character.getNumericValue(ship4[1].charAt(0))][Character.getNumericValue(ship4[1].charAt(1))] == 2) {
+              // Checks if the Patrol Boat sunk
+              
+              // Changes the values of the CPU ship coordinates to 3 which indiates a sunken ship
+              board[Character.getNumericValue(ship4[0].charAt(0))][Character.getNumericValue(ship4[0].charAt(1))] = 3; 
+              board[Character.getNumericValue(ship4[1].charAt(0))][Character.getNumericValue(ship4[1].charAt(1))] = 3; 
+              
+              sunk++;
+              shipDamaged = false; // shipDamaged is set to false so the CPU stops trying to fire at neighbouring cells 
+              sunkenShip = true; 
+              shipName += "Patrol boat ";
+              
+            } else { // Hit but not sunken
+              shipDamaged = true;
+            }
+          } 
+          isGameOver = endGame(board, board2); // Checks if the CPU took out all the user ships 
+          if (isGameOver == 1) { // CPU win 
+            break;
           }
         }
-          
-          if (coordinates[0] < 1 || coordinates[0] > 8 || coordinates[1] < 1 || coordinates[1] > 8 || (board[coordinates[0]][coordinates[1]] != 0 && board[coordinates[0]][coordinates[1]] != 4)) { // The cell is occupied or invalid
-            isValid = false;
-          } else { // The cell is unoccupied 
-            isValid = true;
-            // Checks if the CPU missed, hit, or sunk a ship 
-            if (board[coordinates[0]][coordinates[1]] == 0) { // Miss
-              hitShip = false;
-              misses ++;
-              board[coordinates[0]][coordinates[1]] = 1; 
-            } else if (board[coordinates[0]][coordinates[1]] == 4) { // Hit 
-              hitShip = true;
-              hits ++;
-              board[coordinates[0]][coordinates[1]] = 2; 
-              
-              // Checks if the Aircraft carrier sunk 
-              if (board[Character.getNumericValue(ship1[0].charAt(0))][Character.getNumericValue(ship1[0].charAt(1))] == 2 && board[Character.getNumericValue(ship1[1].charAt(0))][Character.getNumericValue(ship1[1].charAt(1))] == 2 && board[Character.getNumericValue(ship1[2].charAt(0))][Character.getNumericValue(ship1[2].charAt(1))] == 2 && board[Character.getNumericValue(ship1[3].charAt(0))][Character.getNumericValue(ship1[3].charAt(1))] == 2 && board[Character.getNumericValue(ship1[4].charAt(0))][Character.getNumericValue(ship1[4].charAt(1))] == 2) {                                                                         
-                
-                // Changes the values of the CPU ship coordinates to 3 which indiates a sunken ship
-                board[Character.getNumericValue(ship1[0].charAt(0))][Character.getNumericValue(ship1[0].charAt(1))] = 3; 
-                board[Character.getNumericValue(ship1[1].charAt(0))][Character.getNumericValue(ship1[1].charAt(1))] = 3; 
-                board[Character.getNumericValue(ship1[2].charAt(0))][Character.getNumericValue(ship1[2].charAt(1))] = 3; 
-                board[Character.getNumericValue(ship1[3].charAt(0))][Character.getNumericValue(ship1[3].charAt(1))] = 3; 
-                board[Character.getNumericValue(ship1[4].charAt(0))][Character.getNumericValue(ship1[4].charAt(1))] = 3; 
-                
-                sunk++;
-                shipDamaged = false; // shipDamaged is set to false so the CPU stops trying to fire at neighbouring cells 
-                sunkenShip = true; 
-                shipName += "Aircraft Carrier ";
-                
-              } else if (board[Character.getNumericValue(ship2[0].charAt(0))][Character.getNumericValue(ship2[0].charAt(1))] == 2 && board[Character.getNumericValue(ship2[1].charAt(0))][Character.getNumericValue(ship2[1].charAt(1))] == 2 && board[Character.getNumericValue(ship2[2].charAt(0))][Character.getNumericValue(ship2[2].charAt(1))] == 2 && board[Character.getNumericValue(ship2[3].charAt(0))][Character.getNumericValue(ship2[3].charAt(1))] == 2) {
-                // Checks if the Battleship sunk
-                
-                // Changes the values of the CPU ship coordinates to 3 which indiates a sunken ship
-                board[Character.getNumericValue(ship2[0].charAt(0))][Character.getNumericValue(ship2[0].charAt(1))] = 3;
-                board[Character.getNumericValue(ship2[1].charAt(0))][Character.getNumericValue(ship2[1].charAt(1))] = 3;
-                board[Character.getNumericValue(ship2[2].charAt(0))][Character.getNumericValue(ship2[2].charAt(1))] = 3;
-                board[Character.getNumericValue(ship2[3].charAt(0))][Character.getNumericValue(ship2[3].charAt(1))] = 3;
-                
-                sunk++;
-                shipDamaged = false; // shipDamaged is set to false so the CPU stops trying to fire at neighbouring cells 
-                sunkenShip = true; 
-                shipName += "Battleship ";
-                
-              } else if (board[Character.getNumericValue(ship3[0].charAt(0))][Character.getNumericValue(ship3[0].charAt(1))] == 2 && board[Character.getNumericValue(ship3[1].charAt(0))][Character.getNumericValue(ship3[1].charAt(1))] == 2 && board[Character.getNumericValue(ship3[2].charAt(0))][Character.getNumericValue(ship3[2].charAt(1))] == 2) {
-                // Checks if the Submarine sunk
-                
-                // Changes the values of the CPU ship coordinates to 3 which indiates a sunken ship
-                board[Character.getNumericValue(ship3[0].charAt(0))][Character.getNumericValue(ship3[0].charAt(1))] = 3; 
-                board[Character.getNumericValue(ship3[1].charAt(0))][Character.getNumericValue(ship3[1].charAt(1))] = 3; 
-                board[Character.getNumericValue(ship3[2].charAt(0))][Character.getNumericValue(ship3[2].charAt(1))] = 3; 
-                
-                sunk++;
-                shipDamaged = false; // shipDamaged is set to false so the CPU stops trying to fire at neighbouring cells 
-                sunkenShip = true; 
-                shipName += "Submarine ";
-                
-              } else if (board[Character.getNumericValue(ship4[0].charAt(0))][Character.getNumericValue(ship4[0].charAt(1))] == 2 && board[Character.getNumericValue(ship4[1].charAt(0))][Character.getNumericValue(ship4[1].charAt(1))] == 2) {
-                // Checks if the Patrol Boat sunk
-                
-                // Changes the values of the CPU ship coordinates to 3 which indiates a sunken ship
-                board[Character.getNumericValue(ship4[0].charAt(0))][Character.getNumericValue(ship4[0].charAt(1))] = 3; 
-                board[Character.getNumericValue(ship4[1].charAt(0))][Character.getNumericValue(ship4[1].charAt(1))] = 3; 
-                
-                sunk++;
-                shipDamaged = false; // shipDamaged is set to false so the CPU stops trying to fire at neighbouring cells 
-                sunkenShip = true; 
-                shipName += "Patrol boat ";
-                
-              } else { // Hit but not sunken
-                shipDamaged = true;
-              }
-            } 
-            isGameOver = endGame(board, board2); // Checks if the CPU took out all the user ships 
-            if (isGameOver == 1) { // CPU win 
-              break;
-            }
-          }
       } while(hitShip == true); // Loop ends when the CPU misses a shot 
       
     } while (isValid == false); // Loop ends when the CPU enters an occupied cell 
