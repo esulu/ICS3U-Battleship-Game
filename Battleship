@@ -118,7 +118,7 @@ class Battleship
   public static void playGame()
   {
     
-    // Method where the main gameplay will be handled  
+    // Method where the main gameplay will be handled
     
     int[][] board = new int[9][9]; // Initializes an 8x8 game board
     int[][] board2 = new int[9][9];
@@ -143,6 +143,25 @@ class Battleship
     int sunkCPU = 0;
     
     int finalResult; 
+    
+     int difficulty; 
+    boolean validEntry = false;
+    
+    System.out.println("\nChose the bot difficulty by entering its correspoinding number:");
+    System.out.println("1 - Easy: Bot make random shots all the time"
+                         + "\n2 - Medium: Bot makes random shots but if hits a ship it shoots around the hit area"
+                         + "\n3 - Hard: Bot has a 50% increased chance of not missing shots"
+                         + "\n4 - Very Hard: Bot has a 75% increased change of not missing shots");
+    
+    do {
+      difficulty = In.getInt(); // User input 
+      
+      if (difficulty == 1 || difficulty == 2 || difficulty == 3 || difficulty == 4) { // Valid entry
+        validEntry = true;
+      } else {
+        System.out.println("Error: Invalid input. Please enter a valid input.");
+      }
+    } while (validEntry == false);
     
     userTemp = userSetup(board, board2, userShip1, userShip2, userShip3, userShip4); // Method to handle the user ship setup
     board = (int[][])userTemp[0];
@@ -170,7 +189,7 @@ class Battleship
       if (finalResult == 2) { // Checks if the user won the game before the CPU's turn begins
         break;
       } else { // User didn't win 
-        tempCPU = cpuChoice(board, board2, userShip1, userShip2, userShip3, userShip4);
+        tempCPU = cpuChoice(board, board2, userShip1, userShip2, userShip3, userShip4, difficulty);
         board = (int[][])tempCPU[0];
         hitsCPU += (Integer)tempCPU[1];
         missesCPU += (Integer)tempCPU[2];
@@ -665,10 +684,10 @@ class Battleship
     
   }
   
-  public static Object[] cpuChoice(int[][] board, int[][] board2, String[] ship1, String[] ship2, String[] ship3, String[] ship4)
+  public static Object[] cpuChoice(int[][] board, int[][] board2, String[] ship1, String[] ship2, String[] ship3, String[] ship4, int difficulty)
   {
     
-    // Method which handles the computer choice of attack 
+    // Method which handles the computer choice of attack
     
     int [] coordinates = new int[2];
     boolean hitShip = false;
@@ -685,6 +704,7 @@ class Battleship
     int misses = 0;
     int isGameOver = 0;
     int sunk = 0;
+    int chance = 0;
     boolean valid1 = false;
     boolean valid2 = false;
     boolean valid3 = false;
@@ -699,16 +719,19 @@ class Battleship
         
         // CPU coordinates 
         
+        if (difficulty == 1) { // Checks if its easy mode 
+          
+          // Random coordinates
+          coordinates[0] = (generate.nextInt(8)) + 1; 
+          coordinates[1] = (generate.nextInt(8)) + 1;
+          
+        } else { // Difficulty is above easy mode 
+        
         // Checks for hit cells 
         outerloop:
           for (int y = 1; y < 9; y ++) {
           for (int x = 1; x < 9; x ++){ // Board 1
             if (board[y][x] == 2) { // Hit cell 
-  
-              boolean alreadyGuessed1 = false;
-              boolean alreadyGuessed2 = false;
-              boolean alreadyGuessed3 = false;
-              boolean alreadyGuessed4 = false;
               
               shipDamaged = true;
               
@@ -768,26 +791,33 @@ class Battleship
                     // Genterates a random integer from 0-3 to determine which surrounding area to shoot 
                     randomInt = generate.nextInt(4);
                     
-                    if (randomInt == 0 && valid1 == true && alreadyGuessed1 == false) {
-                      alreadyGuessed1 = true;
+                    if (randomInt == 0 && valid1 == true) {
                       validSpace = true;
                       coordinates[0] = sourroundingCoordinates1[0];
                       coordinates[1] = sourroundingCoordinates1[1];
-                    } else if (randomInt == 1 & valid2 == true && alreadyGuessed2 == false) {
-                      alreadyGuessed2 = true;
+                    } else if (randomInt == 1 & valid2 == true) {
                       validSpace = true;
                       coordinates[0] = sourroundingCoordinates2[0];
                       coordinates[1] = sourroundingCoordinates2[1];
-                    } else if (randomInt == 2 && valid3 == true && alreadyGuessed3 == false) {
-                      alreadyGuessed3 = true;
+                    } else if (randomInt == 2 && valid3 == true) {
                       validSpace = true;
                       coordinates[0] = sourroundingCoordinates3[0];
                       coordinates[1] = sourroundingCoordinates3[1];
-                    } else if (randomInt == 3  && valid4 == true && alreadyGuessed4 == false) {
-                      alreadyGuessed4 = true;
+                    } else if (randomInt == 3  && valid4 == true) {
                       validSpace = true;
                       coordinates[0] = sourroundingCoordinates4[0];
                       coordinates[1] = sourroundingCoordinates4[1];
+                    }
+                    if (difficulty == 3) { // Checks if it's hard mode 
+                      chance = generate.nextInt(2);
+                      if (chance == 0 && board[coordinates[0]][coordinates[1]] != 4) { // Checks if 0 was randomized and if the coordinates are a miss 
+                        validSpace = false; // Sets validSpace to false, which restarts the randomizer loop if the cell is empty
+                      }
+                    } else if (difficulty == 4) { // Checks if it's very hard mode 
+                      chance = generate.nextInt(4);
+                      if ((chance == 0 || chance == 1 || chance == 2 || chance == 4) && board[coordinates[0]][coordinates[1]] != 4) { // Checks if 0, 1, or 2 was randomized and if the coordinates are a miss 
+                        validSpace = false; // Sets validSpace to false, which restarts the randomizer loop if the cell is empty
+                      }
                     }
                     
                   } while(validSpace == false); // Loops until a valid entry is entered 
@@ -798,13 +828,25 @@ class Battleship
             }
           }
         }
-          
+
           if (shipDamaged == false) { // No cells are hit, proceeds with random generation 
             coordinates[0] = (generate.nextInt(8)) + 1; 
             coordinates[1] = (generate.nextInt(8)) + 1;
+            
+            if (difficulty == 3) { // Checks if it's hard mode 
+              chance = generate.nextInt(2);
+              if (chance == 0 && board[coordinates[0]][coordinates[1]] != 4) { // Checks if 0 was randomized and if the coordinates are a miss 
+                continue;
+              }
+            } else if (difficulty == 4) { // Checks if it's very hard mode 
+              chance = generate.nextInt(4);
+              if ((chance == 0 || chance == 1 || chance == 2) && board[coordinates[0]][coordinates[1]] != 4) { // Checks if 0, 1, or 2 was randomized and if the coordinates are a miss 
+                continue;
+              }
+            }
           }
+        }
           
-          System.out.println(coordinates[0] + "" + coordinates[1]);
           if (coordinates[0] < 1 || coordinates[0] > 8 || coordinates[1] < 1 || coordinates[1] > 8 || (board[coordinates[0]][coordinates[1]] != 0 && board[coordinates[0]][coordinates[1]] != 4)) { // The cell is occupied or invalid
             isValid = false;
           } else { // The cell is unoccupied 
