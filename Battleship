@@ -815,7 +815,7 @@ class Battleship
                       }
                     } else if (difficulty == 4) { // Checks if it's very hard mode 
                       chance = generate.nextInt(4);
-                      if ((chance == 0 || chance == 1 || chance == 2 || chance == 4) && board[coordinates[0]][coordinates[1]] != 4) { // Checks if 0, 1, or 2 was randomized and if the coordinates are a miss 
+                      if ((chance == 0 || chance == 1 || chance == 2) && board[coordinates[0]][coordinates[1]] != 4) { // Checks if 0, 1, or 2 was randomized and if the coordinates are a miss 
                         validSpace = false; // Sets validSpace to false, which restarts the randomizer loop if the cell is empty
                       }
                     }
