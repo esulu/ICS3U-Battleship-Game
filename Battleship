@@ -22,7 +22,13 @@ class Battleship
     boolean playAgain = false;
     boolean legalEntry = false;
     
-    System.out.println("Welcome to Battleship, a Java game made by Eren Sulutas."); 
+    System.out.println("      ____       _______ _______ _      ______  _____ _    _ _____ _____"); 
+    System.out.println("     |  _ \\   /\\|__   __|__   __| |    |  ____|/ ____| |  | |_   _|  __ \\");
+    System.out.println("     | |_) | /  \\  | |     | |  | |    | |__  | (___ | |__| | | | | |__) |");
+    System.out.println("     |  _ < / /\\ \\ | |     | |  | |    |  __|  \\___ \\|  __  | | | |  ___/");
+    System.out.println("     | |_) / ____ \\| |     | |  | |____| |____ ____) | |  | |_| |_| |"); 
+    System.out.println("     |____/_/    \\_\\_|     |_|  |______|______|_____/|_|  |_|_____|_|\n");  
+                                                                      
     System.out.println("                                     # #  ( )");
     System.out.println("                                  ___#_#___|__");
     System.out.println("                              _  |____________|  _");
@@ -32,7 +38,7 @@ class Battleship
     System.out.println("     \\                                                             /");
     System.out.println("      \\___________________________________________________________/");
     System.out.println("  wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww");
-    System.out.println("wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww");
+    System.out.println("wwwwww--Welcome to Battleship, a Java game made by Eren Sulutas--wwwwwww");
     System.out.println("   wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww");   
     
     do { // Loop for the entire game 
@@ -202,8 +208,22 @@ class Battleship
     
     if (finalResult == 1) { // CPU win
       System.out.println("End of Game. CPU Wins!");
+      System.out.print("\nDifficulty: ");
     } else { // User win
       System.out.println("End of Game. User Wins!");
+      System.out.print("\nDifficulty completed: ");
+    }
+
+    if (difficulty == 1) { 
+      System.out.print("Easy\n");
+    } else if (difficulty == 2) {
+      System.out.print("Medium\n");
+    } else if (difficulty == 3) {
+      System.out.print("Hard\n");
+    } else if (difficulty == 4) { 
+      System.out.print("Very Hard\n");
+    } else if (difficulty == 5) { 
+      System.out.print("Legendary\n");
     }
     
     System.out.println("\nFinal Stats:");
@@ -886,7 +906,7 @@ class Battleship
               sunk++;
               shipDamaged = false; // shipDamaged is set to false so the CPU stops trying to fire at neighbouring cells 
               sunkenShip = true; 
-              shipName += "Aircraft Carrier ";
+              shipName += "Aircraft Carrier, ";
               
             } else if (board[Character.getNumericValue(ship2[0].charAt(0))][Character.getNumericValue(ship2[0].charAt(1))] == 2 && board[Character.getNumericValue(ship2[1].charAt(0))][Character.getNumericValue(ship2[1].charAt(1))] == 2 && board[Character.getNumericValue(ship2[2].charAt(0))][Character.getNumericValue(ship2[2].charAt(1))] == 2 && board[Character.getNumericValue(ship2[3].charAt(0))][Character.getNumericValue(ship2[3].charAt(1))] == 2) {
               // Checks if the Battleship sunk
@@ -900,7 +920,7 @@ class Battleship
               sunk++;
               shipDamaged = false; // shipDamaged is set to false so the CPU stops trying to fire at neighbouring cells 
               sunkenShip = true; 
-              shipName += "Battleship ";
+              shipName += "Battleship, ";
               
             } else if (board[Character.getNumericValue(ship3[0].charAt(0))][Character.getNumericValue(ship3[0].charAt(1))] == 2 && board[Character.getNumericValue(ship3[1].charAt(0))][Character.getNumericValue(ship3[1].charAt(1))] == 2 && board[Character.getNumericValue(ship3[2].charAt(0))][Character.getNumericValue(ship3[2].charAt(1))] == 2) {
               // Checks if the Submarine sunk
@@ -913,7 +933,7 @@ class Battleship
               sunk++;
               shipDamaged = false; // shipDamaged is set to false so the CPU stops trying to fire at neighbouring cells 
               sunkenShip = true; 
-              shipName += "Submarine ";
+              shipName += "Submarine, ";
               
             } else if (board[Character.getNumericValue(ship4[0].charAt(0))][Character.getNumericValue(ship4[0].charAt(1))] == 2 && board[Character.getNumericValue(ship4[1].charAt(0))][Character.getNumericValue(ship4[1].charAt(1))] == 2) {
               // Checks if the Patrol Boat sunk
@@ -925,7 +945,7 @@ class Battleship
               sunk++;
               shipDamaged = false; // shipDamaged is set to false so the CPU stops trying to fire at neighbouring cells 
               sunkenShip = true; 
-              shipName += "Patrol boat ";
+              shipName += "Patrol boat, ";
               
             } else { // Hit but not sunken
               shipDamaged = true;
@@ -944,7 +964,13 @@ class Battleship
     System.out.println("Shots: " + (misses + hits) + " Misses: " + misses + " Hits: " + hits); 
     
     if (sunkenShip == true) { // Checks if the CPU sunk a user ship 
-      System.out.println("Sunken ship(s): " + shipName);
+      if (sunk == 1) { // One sunken ship
+        shipName = shipName.substring(0, shipName.length() - 2); // Removes the last comma 
+        System.out.println("Sunken ship: " + shipName);
+      } else if (sunk > 1) { // Multiple sunken ships
+        shipName = shipName.substring(0, shipName.length() - 2); // Removes the last comma 
+        System.out.println("Sunken ships: " + shipName);
+      }
     }
     
     // Creates an object which contains all the veriables that need to be returned
