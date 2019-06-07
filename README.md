@@ -2,3 +2,4 @@
 
 This program is a fully playable version of the board game Battleship made in Java. Made by Eren Sulutas for the ICS3U summative game design summative. 
 
+Note: In.class is required for the game to run
